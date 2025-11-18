@@ -5,8 +5,9 @@ data class Team(
     val name: String = "",
     val image: String = "",
     val participants: List<String> = emptyList(),
-    val creador: String = "",
-    val torneos: List<String> = emptyList()
+    val creator: String = "",
+    val tournaments: List<String> = emptyList()
 ) {
-    constructor() : this("", "", "", emptyList(), "", emptyList())
+    constructor() : this("", "", "", emptyList(), "",
+        emptyList())
 }

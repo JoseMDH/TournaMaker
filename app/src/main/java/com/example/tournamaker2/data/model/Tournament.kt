@@ -8,10 +8,12 @@ data class Tournament(
     val organizer: String? = null,
     val image: String? = null,
     val description: String? = null,
-    val entry_tax: String? = null,
+    val entryTax: String? = null,
     val teams: List<String>? = emptyList(),
-    val prize_pool: String? = null,
-    val teams_num: Int? = 0
+    val prizePool: String? = null,
+    val teamsNum: Int? = 0
 ) {
-    constructor() : this("", "", null, null, null, null, null, null, emptyList(), null, 0)
+    constructor() : this("", "", null, null, null,
+        null, null, null, emptyList(), null,
+        0)
 }
