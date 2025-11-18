@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.tournamaker.ui.auth.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_login">
+
+        <action
+            android:id="@+id/action_loginFragment_to_landingFragment"
+            app:destination="@id/landingFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.tournamaker.ui.auth.RegisterFragment"
+        android:label="Registro"
+        tools:layout="@layout/fragment_register">
+
+        <action
+            android:id="@+id/action_registerFragment_to_landingFragment"
+            app:destination="@id/landingFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/landingFragment"
+        android:name="com.example.tournamaker.ui.main.LandingFragment"
+        android:label="Inicio"
+        tools:layout="@layout/fragment_landing">
+
+        <action
+            android:id="@+id/action_landingFragment_to_tournamentView"
+            app:destination="@id/tournamentViewFragment" />
+
+        <action
+            android:id="@+id/action_landingFragment_to_matchView"
+            app:destination="@id/matchViewFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/allTournamentsFragment"
+        android:name="com.example.tournamaker.ui.tournament.AllTournamentsFragment"
+        android:label="Torneos"
+        tools:layout="@layout/fragment_all_tournaments">
+
+        <action
+            android:id="@+id/action_allTournamentsFragment_to_tournamentView"
+            app:destination="@id/tournamentViewFragment" />
+
+        <action
+            android:id="@+id/action_allTournamentsFragment_to_createTournament"
+            app:destination="@id/createTournamentFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/allMatchesFragment"
+        android:name="com.example.tournamaker.ui.match.AllMatchesFragment"
+        android:label="Partidos"
+        tools:layout="@layout/fragment_all_matches">
+
+        <action
+            android:id="@+id/action_allMatchesFragment_to_matchView"
+            app:destination="@id/matchViewFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/tournamentViewFragment"
+        android:name="com.example.tournamaker.ui.tournament.TournamentViewFragment"
+        android:label="Torneo"
+        tools:layout="@layout/fragment_tournament_view">
+
+        <argument
+            android:name="tournamentId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/matchViewFragment"
+        android:name="com.example.tournamaker.ui.match.MatchViewFragment"
+        android:label="Partido"
+        tools:layout="@layout/fragment_match_view">
+
+        <argument
+            android:name="matchId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/createTournamentFragment"
+        android:name="com.example.tournamaker.ui.tournament.CreateTournamentFragment"
+        android:label="Crear Torneo"
+        tools:layout="@layout/fragment_create_tournament" />
+
+    <fragment
+        android:id="@+id/createMatchFragment"
+        android:name="com.example.tournamaker.ui.match.CreateMatchFragment"
+        android:label="Crear Partido"
+        tools:layout="@layout/fragment_create_match">
+
+        <argument
+            android:name="tournamentId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/createTeamFragment"
+        android:name="com.example.tournamaker.ui.team.CreateTeamFragment"
+        android:label="Crear Equipo"
+        tools:layout="@layout/fragment_create_team" />
+
+    <fragment
+        android:id="@+id/userPageFragment"
+        android:name="com.example.tournamaker.ui.user.UserPageFragment"
+        android:label="Perfil"
+        tools:layout="@layout/fragment_user_page" />
+
+</navigation>

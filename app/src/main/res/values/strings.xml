@@ -1,0 +1,50 @@
+<resources>
+    <string name="app_name">TournaMaker</string>
+
+    <string name="login">Iniciar Sesión</string>
+    <string name="register">Registrarse</string>
+    <string name="logout">Cerrar Sesión</string>
+    <string name="email">Email</string>
+    <string name="password">Contraseña</string>
+    <string name="username">Nombre de usuario</string>
+    <string name="full_name">Nombre completo</string>
+
+    <string name="home">Inicio</string>
+    <string name="tournaments">Torneos</string>
+    <string name="matches">Partidos</string>
+    <string name="profile">Perfil</string>
+
+    <string name="create">Crear</string>
+    <string name="edit">Editar</string>
+    <string name="delete">Eliminar</string>
+    <string name="save">Guardar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="see_all">Ver todos</string>
+
+    <string name="loading">Cargando…</string>
+    <string name="error_generic">Ha ocurrido un error</string>
+    <string name="no_data">No hay datos disponibles</string>
+    <string name="inicio">Inicio</string>
+    <string name="torneos">Torneos</string>
+    <string name="partidos">Partidos</string>
+    <string name="perfil">Perfil</string>
+    <string name="hola_usuario">¡Hola, Usuario!</string>
+    <string name="organiza_y_participa_en_torneos">Organiza y participa en torneos</string>
+    <string name="torneos_disponibles">Torneos Disponibles</string>
+    <string name="ver_todos">Ver todos</string>
+    <string name="cargando_torneos">Cargando torneos...</string>
+    <string name="partidos_pr_ximos">Partidos Próximos</string>
+    <string name="crear_torneo">+ Crear Torneo</string>
+    <string name="tournamaker">TournaMaker</string>
+    <string name="iniciar_sesi_n">Iniciar Sesión</string>
+    <string name="contrase_a">Contraseña</string>
+    <string name="sin_cuenta">¿No tienes cuenta? Regístrate aquí</string>
+    <string name="crear_cuenta">Crear Cuenta</string>
+    <string name="nombre_de_usuario">Nombre de usuario</string>
+    <string name="nombre_completo">Nombre completo</string>
+    <string name="registrarse">Registrarse</string>
+    <string name="con_cuenta">¿Ya tienes cuenta? Inicia sesión</string>
+    <string name="nombre_del_torneo">Nombre del Torneo</string>
+    <string name="descripci_n_del_torneo">Descripción del torneo...</string>
+    <string name="fecha_lugar">Fecha Lugar</string>
+</resources>

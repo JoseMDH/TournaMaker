@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "441629400942",
+    "project_id": "tournamaker-7deca",
+    "storage_bucket": "tournamaker-7deca.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:441629400942:android:b85065f1e1b0a95f56ab7f",
+        "android_client_info": {
+          "package_name": "com.example.tournamaker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASHk8pQGcmkAPhuN5UZ8Z98N-UxbWQtKQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
