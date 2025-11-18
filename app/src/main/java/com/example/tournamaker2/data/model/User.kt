@@ -1,4 +1,4 @@
-package com.example.tournamaker2.data.model
+package com.example.tournamaker.data.model
 
 data class User(
     val id: String = "",
