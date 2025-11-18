@@ -3,20 +3,20 @@
     <item
         android:id="@+id/landingFragment"
         android:icon="@android:drawable/ic_menu_compass"
-        android:title="@string/inicio" />
+        android:title="@string/home" />
 
     <item
         android:id="@+id/allTournamentsFragment"
         android:icon="@android:drawable/ic_menu_agenda"
-        android:title="@string/torneos" />
+        android:title="@string/tournaments" />
 
     <item
         android:id="@+id/allMatchesFragment"
         android:icon="@android:drawable/ic_menu_today"
-        android:title="@string/partidos" />
+        android:title="@string/matches" />
 
     <item
         android:id="@+id/userPageFragment"
         android:icon="@android:drawable/ic_menu_myplaces"
-        android:title="@string/perfil" />
+        android:title="@string/profile" />
 </menu>

@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.tournamaker2.ui.auth.LoginFragment"
+        android:name="com.example.tournamaker.ui.auth.LoginFragment"
         android:label="Login"
         tools:layout="@layout/fragment_login">
 
