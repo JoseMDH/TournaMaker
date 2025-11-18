@@ -1,9 +1,9 @@
-package com.example.tournamaker.utils
+package com.example.tournamaker2.utils
 
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
-import com.example.tournamaker.data.model.User
+import com.example.tournamaker2.data.model.User
 
 class AuthManager private constructor(context: Context) {
     private val prefs: SharedPreferences =

@@ -22,7 +22,7 @@
             android:id="@+id/tv_welcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/hola_usuario"
+            android:text="@string/helloUser"
             android:textColor="@android:color/white"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -30,7 +30,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/organiza_y_participa_en_torneos"
+            android:text="@string/organizesAndParticipates"
             android:textColor="@android:color/white"
             android:textSize="14sp"
             android:layout_marginTop="4dp" />
@@ -61,7 +61,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/torneos_disponibles"
+                    android:text="@string/tournaments"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -69,7 +69,7 @@
                     android:id="@+id/tv_see_all_tournaments"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/ver_todos"
+                    android:text="@string/see_all"
                     android:textColor="?attr/colorPrimary"
                     android:textStyle="bold"
                     android:padding="8dp" />
@@ -80,7 +80,7 @@
                 android:id="@+id/tv_tournaments_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/cargando_torneos"
+                android:text="@string/loading"
                 android:textSize="14sp"
                 android:textColor="?android:attr/textColorSecondary"
                 android:layout_marginTop="4dp" />
@@ -111,7 +111,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/partidos_pr_ximos"
+                    android:text="@string/nextMatches"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -119,7 +119,7 @@
                     android:id="@+id/tv_see_all_matches"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/ver_todos"
+                    android:text="@string/see_all"
                     android:textColor="?attr/colorPrimary"
                     android:textStyle="bold"
                     android:padding="8dp" />
@@ -138,7 +138,7 @@
                 android:id="@+id/btn_create_tournament"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/crear_torneo"
+                android:text="@string/createTournament"
                 android:textSize="16sp"
                 app:cornerRadius="8dp"
                 android:layout_marginTop="32dp" />

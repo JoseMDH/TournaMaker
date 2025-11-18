@@ -7,7 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.tournamaker.databinding.ActivityMainBinding
-import com.example.tournamaker.utils.AuthManager
+import com.example.tournamaker2.utils.AuthManager
 import com.example.tournamaker.R
 
 class MainActivity : AppCompatActivity() {
