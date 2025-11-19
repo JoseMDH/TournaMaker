@@ -4,10 +4,14 @@ data class Team(
     val id: String = "",
     val name: String = "",
     val image: String = "",
-    val participants: List<String> = emptyList(),
-    val creator: String = "",
-    val tournaments: List<String> = emptyList()
+    val creatorId: String = "",
+    val participants: List<String> = emptyList()
 ) {
-    constructor() : this("", "", "", emptyList(), "",
-        emptyList())
+    constructor() : this(
+        id = "",
+        name = "",
+        image = "",
+        creatorId = "",
+        participants = emptyList()
+    )
 }
