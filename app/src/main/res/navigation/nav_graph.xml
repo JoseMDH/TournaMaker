@@ -75,6 +75,10 @@
         <action
             android:id="@+id/action_allMatchesFragment_to_matchView"
             app:destination="@id/matchViewFragment" />
+
+        <action
+            android:id="@+id/action_allMatchesFragment_to_createMatch"
+            app:destination="@id/createMatchFragment" />
     </fragment>
 
     <fragment
