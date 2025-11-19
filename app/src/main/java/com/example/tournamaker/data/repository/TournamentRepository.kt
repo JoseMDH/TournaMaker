@@ -19,4 +19,22 @@ class TournamentRepository {
             emptyList()
         }
     }
+
+    suspend fun getTournamentById(tournamentId: String): Tournament? {
+        return try {
+            tournamentsCollection.document(tournamentId).get().await()
+                .toObject<Tournament>()?.copy(id = tournamentId)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    suspend fun createTournament(tournament: Tournament): Result<Tournament> {
+        return try {
+            val docRef = tournamentsCollection.add(tournament).await()
+            Result.success(tournament.copy(id = docRef.id))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

@@ -103,7 +103,12 @@
         android:id="@+id/createTournamentFragment"
         android:name="com.example.tournamaker.ui.tournament.CreateTournamentFragment"
         android:label="Crear Torneo"
-        tools:layout="@layout/fragment_create_tournament" />
+        tools:layout="@layout/fragment_create_tournament">
+
+        <action
+            android:id="@+id/action_createTournamentFragment_to_tournamentView"
+            app:destination="@id/tournamentViewFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/createMatchFragment"
