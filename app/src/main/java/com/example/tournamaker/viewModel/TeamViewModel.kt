@@ -12,6 +12,9 @@ class TeamViewModel : ViewModel() {
 
     private val teamRepository = TeamRepository()
 
+    private val _selectedTeam = MutableLiveData<Team?>()
+    val selectedTeam: LiveData<Team?> = _selectedTeam
+
     private val _creationResult = MutableLiveData<Result<Team>>()
     val creationResult: LiveData<Result<Team>> = _creationResult
 
@@ -23,6 +26,18 @@ class TeamViewModel : ViewModel() {
             _loading.value = true
             val result = teamRepository.createTeam(team)
             _creationResult.postValue(result)
+            _loading.value = false
+        }
+    }
+
+    fun loadTeamById(teamId: String) {
+        viewModelScope.launch {
+            _loading.value = true
+            try {
+                _selectedTeam.postValue(teamRepository.getTeamById(teamId))
+            } catch (e: Exception) {
+                _selectedTeam.postValue(null)
+            }
             _loading.value = false
         }
     }

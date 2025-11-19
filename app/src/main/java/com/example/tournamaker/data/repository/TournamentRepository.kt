@@ -37,4 +37,14 @@ class TournamentRepository {
             Result.failure(e)
         }
     }
+
+    suspend fun getTournamentsByCreator(userId: String): List<Tournament> {
+        return try {
+            tournamentsCollection.whereEqualTo("creatorId", userId).get().await().documents.mapNotNull {
+                it.toObject<Tournament>()?.copy(id = it.id)
+            }
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
 }

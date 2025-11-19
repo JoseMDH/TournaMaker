@@ -2,6 +2,7 @@ package com.example.tournamaker.data.repository
 
 import com.example.tournamaker.data.model.Team
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
 
 class TeamRepository {
@@ -15,6 +16,25 @@ class TeamRepository {
             Result.success(team.copy(id = docRef.id))
         } catch (e: Exception) {
             Result.failure(e)
+        }
+    }
+
+    suspend fun getTeamsByCreator(userId: String): List<Team> {
+        return try {
+            teamsCollection.whereEqualTo("creatorId", userId).get().await().documents.mapNotNull {
+                it.toObject<Team>()?.copy(id = it.id)
+            }
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    suspend fun getTeamById(teamId: String): Team? {
+        return try {
+            teamsCollection.document(teamId).get().await()
+                .toObject<Team>()?.copy(id = teamId)
+        } catch (e: Exception) {
+            null
         }
     }
 }
