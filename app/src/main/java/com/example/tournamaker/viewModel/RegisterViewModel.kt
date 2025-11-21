@@ -22,18 +22,8 @@ class RegisterViewModel : ViewModel() {
         _loading.value = true
         viewModelScope.launch {
             try {
-                val existingUser = userRepository.getByEmail(email)
-                if (existingUser != null) {
-                    _registerResult.postValue(Result.failure(Exception("El correo electrónico ya está en uso")))
-                    _loading.postValue(false)
-                    return@launch
-                }
-
-                val newUser = User(username = username, name = name, email = email, password = password)
-                val creationResult = userRepository.create(newUser)
-
-                _registerResult.postValue(creationResult)
-
+                val result = userRepository.registerUser(email, password, username, name)
+                _registerResult.postValue(result)
             } catch (e: Exception) {
                 _registerResult.postValue(Result.failure(e))
             } finally {

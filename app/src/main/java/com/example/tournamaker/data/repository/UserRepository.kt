@@ -1,6 +1,7 @@
 package com.example.tournamaker.data.repository
 
 import com.example.tournamaker.data.model.User
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.channels.awaitClose
@@ -10,6 +11,7 @@ import kotlinx.coroutines.tasks.await
 
 class UserRepository {
     private val firestore = FirebaseFirestore.getInstance()
+    private val auth = FirebaseAuth.getInstance()
     private val usersCollection = firestore.collection("users")
 
     suspend fun getAll(): List<User> {
@@ -30,26 +32,42 @@ class UserRepository {
         }
     }
 
-    suspend fun getByEmail(email: String): User? {
+    suspend fun loginUser(email: String, password: String): Result<User> {
         return try {
-            usersCollection
-                .whereEqualTo("email", email)
-                .get()
-                .await()
-                .documents
-                .firstOrNull()
-                ?.let { document ->
-                    document.toObject<User>()?.copy(id = document.id)
-                }
+            // 1. Autenticar al usuario con Firebase Authentication
+            val authResult = auth.signInWithEmailAndPassword(email, password).await()
+            val firebaseUser = authResult.user!!
+
+            // 2. Si la autenticación es exitosa, obtener los datos del perfil desde Firestore
+            val userProfile = getById(firebaseUser.uid)
+                ?: return Result.failure(Exception("El perfil del usuario no fue encontrado."))
+
+            Result.success(userProfile)
         } catch (e: Exception) {
-            null
+            // La excepción puede ser por contraseña incorrecta, usuario no encontrado, etc.
+            Result.failure(Exception("El email o la contraseña son incorrectos."))
         }
     }
 
-    suspend fun create(user: User): Result<User> {
+    suspend fun registerUser(email: String, password: String, username: String, name: String): Result<User> {
         return try {
-            val docRef = usersCollection.add(user).await()
-            Result.success(user.copy(id = docRef.id))
+            // 1. Crear el usuario en Firebase Authentication
+            val authResult = auth.createUserWithEmailAndPassword(email, password).await()
+            val firebaseUser = authResult.user!!
+
+            // 2. Crear nuestro objeto User para guardarlo en Firestore
+            val newUser = User(
+                id = firebaseUser.uid, // Usar el UID de Firebase Auth como nuestro ID
+                username = username,
+                name = name,
+                email = email,
+                password = "", // NUNCA guardar la contraseña en texto plano
+                avatar = "" // Puedes poner una URL de avatar por defecto aquí
+            )
+
+            // 3. Guardar el objeto User en la colección "users" de Firestore
+            usersCollection.document(firebaseUser.uid).set(newUser).await()
+            Result.success(newUser)
         } catch (e: Exception) {
             Result.failure(e)
         }

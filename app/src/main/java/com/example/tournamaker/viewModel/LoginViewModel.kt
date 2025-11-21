@@ -22,12 +22,8 @@ class LoginViewModel : ViewModel() {
         _loading.value = true
         viewModelScope.launch {
             try {
-                val user = userRepository.getByEmail(email)
-                if (user != null && user.password == password) {
-                    _loginResult.postValue(Result.success(user))
-                } else {
-                    _loginResult.postValue(Result.failure(Exception("Email o contraseña incorrectos")))
-                }
+                val result = userRepository.loginUser(email, password)
+                _loginResult.postValue(result)
             } catch (e: Exception) {
                 _loginResult.postValue(Result.failure(e))
             }
