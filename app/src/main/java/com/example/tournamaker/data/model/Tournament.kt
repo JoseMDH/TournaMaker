@@ -12,6 +12,7 @@ data class Tournament(
     val place: String = "",
     val maxParticipants: Int = 0,
     val creatorId: String = "",
+    val imageUrl: String = "",
     @ServerTimestamp
     val creationDate: Date? = null,
     val participants: List<String> = emptyList(),
@@ -26,6 +27,7 @@ data class Tournament(
         place = "",
         maxParticipants = 0,
         creatorId = "",
+        imageUrl = "",
         creationDate = null,
         participants = emptyList(),
         rounds = 0

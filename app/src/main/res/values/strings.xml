@@ -26,15 +26,13 @@
     <string name="no_data">No hay datos disponibles</string>
 
     <string name="createTournament">Crear Torneo</string>
-    <string name="nextMatches">Próximos Partidos</string>
-    <string name="organizesAndParticipates">Organiza y Participa en Torneos</string>
-    <string name="helloUser">Hola Usuario</string>
+    <string name="tournaments_available">Torneos Disponibles</string>
+    <string name="matches_available">Partidos Disponibles</string>
 
     <string name="withoutAccount">No tienes cuenta. Registrate aquí.</string>
     <string name="withAccount">Ya tienes cuenta. Inicia sesión aquí.</string>
     <string name="createAccount">Crear Cuenta</string>
 
-    <string name="dateAndPlace">Fecha y Lugar</string>
     <string name="tournamentDescription">Descripción del torneo</string>
     <string name="tournamentName">Nombre del torneo</string>
 
@@ -43,4 +41,9 @@
     <string name="create_tournament">Crear Torneo</string>
     <string name="create_match">Crear Partido</string>
     <string name="create_team">Crear Equipo</string>
+    <string name="see_all_tournaments_desc">Ver todos los torneos disponibles</string>
+    <string name="see_all_matches_desc">Ver todos los partidos disponibles</string>
+    <string name="tournament_image_desc">Imagen del torneo</string>
+    <string name="match_image_desc">Imagen del partido</string>
+
 </resources>

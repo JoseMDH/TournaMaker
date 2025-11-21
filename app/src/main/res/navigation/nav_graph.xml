@@ -143,7 +143,9 @@
             app:destination="@id/tournamentViewFragment" />
         <action
             android:id="@+id/action_userPageFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true"/>
         <action
             android:id="@+id/action_userPageFragment_to_teamViewFragment"
             app:destination="@id/teamViewFragment" />

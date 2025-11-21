@@ -24,11 +24,11 @@ class TournamentViewModel : ViewModel() {
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
 
-    fun loadAllTournaments() {
+    fun loadAllTournaments(limit: Int? = null) {
         viewModelScope.launch {
             _loading.value = true
             try {
-                _tournaments.postValue(tournamentRepository.getAllTournaments())
+                _tournaments.postValue(tournamentRepository.getAllTournaments(limit))
             } catch (e: Exception) {
                 _tournaments.postValue(emptyList())
             }

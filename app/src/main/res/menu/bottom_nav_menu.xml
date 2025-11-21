@@ -15,8 +15,4 @@
         android:icon="@android:drawable/ic_menu_today"
         android:title="@string/matches" />
 
-    <item
-        android:id="@+id/userPageFragment"
-        android:icon="@android:drawable/ic_menu_myplaces"
-        android:title="@string/profile" />
 </menu>

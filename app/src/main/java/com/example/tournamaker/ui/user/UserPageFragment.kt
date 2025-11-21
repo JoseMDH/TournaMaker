@@ -8,26 +8,27 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.tournamaker.R
-import com.example.tournamaker.adapter.TeamAdapter
-import com.example.tournamaker.adapter.TournamentAdapter
+import com.example.tournamaker.adapter.ProfileOptionsAdapter
 import com.example.tournamaker.databinding.FragmentUserPageBinding
 import com.example.tournamaker.utils.AuthManager
-import com.example.tournamaker.utils.hide
-import com.example.tournamaker.utils.loadImage
-import com.example.tournamaker.utils.show
+import com.example.tournamaker.utils.showToast
 import com.example.tournamaker.viewModel.UserViewModel
 
 class UserPageFragment : Fragment() {
+
     private var _binding: FragmentUserPageBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: UserViewModel by viewModels()
     private lateinit var authManager: AuthManager
-    private lateinit var tournamentAdapter: TournamentAdapter
-    private lateinit var teamAdapter: TeamAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentUserPageBinding.inflate(inflater, container, false)
         authManager = AuthManager.getInstance(requireContext())
         return binding.root
@@ -36,78 +37,58 @@ class UserPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
-        setupRecyclerViews()
-        setupListeners()
         setupObservers()
-        loadData()
+        loadUserData()
     }
 
     private fun setupUI() {
-        val user = authManager.getUser()
-        if (user != null) {
-            binding.tvUsername.text = user.username
-            binding.tvName.text = user.name
-            binding.tvEmail.text = user.email
-            binding.ivAvatar.loadImage(user.avatar)
-        } else {
-            navigateToLogin()
-        }
-    }
+        val options = listOf(
+            Pair(android.R.drawable.ic_menu_edit, "Datos Personales"),
+            Pair(android.R.drawable.ic_menu_myplaces, "Mis Equipos"),
+            Pair(android.R.drawable.ic_menu_sort_by_size, "Mis Estadísticas"),
+            Pair(android.R.drawable.ic_menu_agenda, "Mis Torneos"),
+            Pair(android.R.drawable.ic_menu_today, "Mis Partidos")
+        )
 
-    private fun setupRecyclerViews() {
-        tournamentAdapter = TournamentAdapter(emptyList()) { tournament ->
-            val action = UserPageFragmentDirections.actionUserPageFragmentToTournamentViewFragment(tournament.id)
-            findNavController().navigate(action)
-        }
-        binding.rvUserTournaments.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = tournamentAdapter
+        val adapter = ProfileOptionsAdapter(options) { selectedOption ->
+            // TODO: Navigate to the corresponding screen for each option
+            showToast("Opción seleccionada: $selectedOption")
         }
 
-        teamAdapter = TeamAdapter(emptyList()) { team ->
-            val action = UserPageFragmentDirections.actionUserPageFragmentToTeamViewFragment(team.id)
-            findNavController().navigate(action)
-        }
-        binding.rvUserTeams.apply {
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = teamAdapter
-        }
-    }
+        binding.rvProfileOptions.layoutManager = LinearLayoutManager(context)
+        binding.rvProfileOptions.adapter = adapter
 
-    private fun setupListeners() {
         binding.btnLogout.setOnClickListener {
             authManager.logout()
-            navigateToLogin()
+            findNavController().navigate(R.id.action_userPageFragment_to_loginFragment)
         }
     }
 
     private fun setupObservers() {
-        viewModel.userTournaments.observe(viewLifecycleOwner) { tournaments ->
-            tournamentAdapter.updateTournaments(tournaments)
-        }
-
-        viewModel.userTeams.observe(viewLifecycleOwner) { teams ->
-            teamAdapter.updateTeams(teams)
-        }
-
-        viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
-            if (isLoading) {
-                binding.progressBar.show()
-            } else {
-                binding.progressBar.hide()
+        viewModel.user.observe(viewLifecycleOwner) { user ->
+            user?.let {
+                binding.tvUsername.text = it.username
+                Glide.with(this)
+                    .load(it.avatar)
+                    .circleCrop()
+                    .into(binding.ivAvatar)
             }
         }
-    }
 
-    private fun loadData() {
-        val user = authManager.getUser()
-        user?.id?.let {
-            viewModel.loadUserProfile(it)
+        viewModel.loading.observe(viewLifecycleOwner) {
+            binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
         }
     }
 
-    private fun navigateToLogin() {
-        findNavController().navigate(R.id.action_userPageFragment_to_loginFragment)
+    private fun loadUserData() {
+        val userId = authManager.getUser()?.id
+        if (userId != null) {
+            viewModel.loadUser(userId)
+        } else {
+            // Handle user not logged in case
+            authManager.logout()
+            findNavController().navigate(R.id.action_userPageFragment_to_loginFragment)
+        }
     }
 
     override fun onDestroyView() {

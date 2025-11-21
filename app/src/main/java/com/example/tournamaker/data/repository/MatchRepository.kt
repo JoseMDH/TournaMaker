@@ -2,6 +2,7 @@ package com.example.tournamaker.data.repository
 
 import com.example.tournamaker.data.model.Match
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
 
@@ -10,9 +11,14 @@ class MatchRepository {
     private val firestore = FirebaseFirestore.getInstance()
     private val matchesCollection = firestore.collection("matches")
 
-    suspend fun getAllMatches(): List<Match> {
+    suspend fun getAllMatches(limit: Int? = null): List<Match> {
         return try {
-            matchesCollection.get().await().documents.mapNotNull {
+            val query: Query = if (limit != null) {
+                matchesCollection.limit(limit.toLong())
+            } else {
+                matchesCollection
+            }
+            query.get().await().documents.mapNotNull {
                 it.toObject<Match>()?.copy(id = it.id)
             }
         } catch (e: Exception) {

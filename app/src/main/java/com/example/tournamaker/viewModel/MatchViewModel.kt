@@ -24,11 +24,11 @@ class MatchViewModel : ViewModel() {
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
 
-    fun loadAllMatches() {
+    fun loadAllMatches(limit: Int? = null) {
         viewModelScope.launch {
             _loading.value = true
             try {
-                _matches.postValue(matchRepository.getAllMatches())
+                _matches.postValue(matchRepository.getAllMatches(limit))
             } catch (e: Exception) {
                 _matches.postValue(emptyList())
             }

@@ -15,6 +15,7 @@ data class Match(
     val date: String = "",
     val round: Int = 0,
     val status: String = "PENDING", // PENDING, IN_PROGRESS, FINISHED
+    val imageUrl: String = "",
     @ServerTimestamp
     val creationDate: Date? = null
 ) {
@@ -30,6 +31,7 @@ data class Match(
         date = "",
         round = 0,
         status = "PENDING",
+        imageUrl = "",
         creationDate = null
     )
 }
