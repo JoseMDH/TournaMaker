@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/createTournamentFragment"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="@string/create_tournament" />
+    <item
+        android:id="@+id/createMatchFragment"
+        android:icon="@android:drawable/ic_menu_today"
+        android:title="@string/create_match" />
+    <item
+        android:id="@+id/createTeamFragment"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="@string/create_team" />
+</menu>

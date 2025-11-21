@@ -37,4 +37,10 @@
     <string name="dateAndPlace">Fecha y Lugar</string>
     <string name="tournamentDescription">Descripción del torneo</string>
     <string name="tournamentName">Nombre del torneo</string>
+
+    <!-- Accessibility & Actions -->
+    <string name="action_profile">Perfil de usuario</string>
+    <string name="create_tournament">Crear Torneo</string>
+    <string name="create_match">Crear Partido</string>
+    <string name="create_team">Crear Equipo</string>
 </resources>

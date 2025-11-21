@@ -1,9 +1,12 @@
 package com.example.tournamaker.ui.auth
 
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -74,6 +77,21 @@ class RegisterFragment : Fragment() {
 
         binding.tvGoToLogin.setOnClickListener {
             findNavController().popBackStack()
+        }
+
+        binding.tvGoToLogin.setOnHoverListener { v, event ->
+            val textView = v as TextView
+            when (event.action) {
+                MotionEvent.ACTION_HOVER_ENTER -> {
+                    textView.paintFlags = textView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+                    true
+                }
+                MotionEvent.ACTION_HOVER_EXIT -> {
+                    textView.paintFlags = textView.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
+                    true
+                }
+                else -> false
+            }
         }
     }
 
