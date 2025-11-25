@@ -43,13 +43,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_add_tournament"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:contentDescription="Añadir torneo"
-        app:srcCompat="@android:drawable/ic_input_add" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
