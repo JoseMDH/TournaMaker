@@ -4,7 +4,6 @@
     <item
         android:id="@+id/userPageFragment"
         android:icon="@android:drawable/ic_menu_myplaces"
-        android:title="@string/action_profile"
-        app:showAsAction="ifRoom"
-        android:contentDescription="@string/action_profile" />
+        android:title="@string/profile"
+        app:showAsAction="ifRoom" />
 </menu>

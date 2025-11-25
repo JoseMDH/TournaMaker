@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/landingFragment"
-        android:icon="@android:drawable/ic_menu_compass"
-        android:title="@string/home" />
-
-    <item
-        android:id="@+id/allTournamentsFragment"
-        android:icon="@android:drawable/ic_menu_agenda"
-        android:title="@string/tournaments" />
-
-    <item
-        android:id="@+id/allMatchesFragment"
-        android:icon="@android:drawable/ic_menu_today"
-        android:title="@string/matches" />
-
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="@string/home"
+        app:showAsAction="ifRoom" />
 </menu>

@@ -6,7 +6,6 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/loginFragment">
 
-    <!-- Acción Global para volver al Login -->
     <action
         android:id="@+id/action_global_loginFragment"
         app:destination="@id/loginFragment"
