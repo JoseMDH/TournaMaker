@@ -13,11 +13,12 @@ class MatchRepository {
 
     suspend fun getAllMatches(limit: Int? = null): List<Match> {
         return try {
-            val query: Query = if (limit != null) {
-                matchesCollection.limit(limit.toLong())
-            } else {
-                matchesCollection
+            var query: Query = matchesCollection
+
+            if (limit != null) {
+                query = query.limit(limit.toLong())
             }
+
             query.get().await().documents.mapNotNull {
                 it.toObject<Match>()?.copy(id = it.id)
             }
@@ -41,6 +42,19 @@ class MatchRepository {
             Result.success(match.copy(id = docRef.id))
         } catch (e: Exception) {
             Result.failure(e)
+        }
+    }
+
+    suspend fun getMatchesByTournamentIds(tournamentIds: List<String>): List<Match> {
+        if (tournamentIds.isEmpty()) {
+            return emptyList()
+        }
+        return try {
+            matchesCollection.whereIn("tournamentId", tournamentIds).get().await().documents.mapNotNull {
+                it.toObject<Match>()?.copy(id = it.id)
+            }
+        } catch (e: Exception) {
+            emptyList()
         }
     }
 }

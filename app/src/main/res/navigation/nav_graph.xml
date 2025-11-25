@@ -6,6 +6,13 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/loginFragment">
 
+    <!-- Acción Global para volver al Login -->
+    <action
+        android:id="@+id/action_global_loginFragment"
+        app:destination="@id/loginFragment"
+        app:popUpTo="@id/nav_graph"
+        app:popUpToInclusive="true" />
+
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.tournamaker.ui.auth.LoginFragment"
@@ -139,16 +146,14 @@
         android:label="Perfil"
         tools:layout="@layout/fragment_user_page" >
         <action
-            android:id="@+id/action_userPageFragment_to_tournamentViewFragment"
-            app:destination="@id/tournamentViewFragment" />
+            android:id="@+id/action_userPageFragment_to_myTournamentsFragment"
+            app:destination="@id/myTournamentsFragment" />
         <action
-            android:id="@+id/action_userPageFragment_to_loginFragment"
-            app:destination="@id/loginFragment"
-            app:popUpTo="@id/nav_graph"
-            app:popUpToInclusive="true"/>
+            android:id="@+id/action_userPageFragment_to_myTeamsFragment"
+            app:destination="@id/myTeamsFragment" />
         <action
-            android:id="@+id/action_userPageFragment_to_teamViewFragment"
-            app:destination="@id/teamViewFragment" />
+            android:id="@+id/action_userPageFragment_to_myMatchesFragment"
+            app:destination="@id/myMatchesFragment" />
     </fragment>
 
     <fragment
@@ -159,6 +164,36 @@
         <argument
             android:name="teamId"
             app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/myTournamentsFragment"
+        android:name="com.example.tournamaker.ui.user.MyTournamentsFragment"
+        android:label="Mis Torneos"
+        tools:layout="@layout/fragment_my_tournaments">
+        <action
+            android:id="@+id/action_myTournamentsFragment_to_tournamentViewFragment"
+            app:destination="@id/tournamentViewFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/myTeamsFragment"
+        android:name="com.example.tournamaker.ui.user.MyTeamsFragment"
+        android:label="Mis Equipos"
+        tools:layout="@layout/fragment_my_teams">
+        <action
+            android:id="@+id/action_myTeamsFragment_to_teamViewFragment"
+            app:destination="@id/teamViewFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/myMatchesFragment"
+        android:name="com.example.tournamaker.ui.user.MyMatchesFragment"
+        android:label="Mis Partidos"
+        tools:layout="@layout/fragment_my_matches">
+        <action
+            android:id="@+id/action_myMatchesFragment_to_matchViewFragment"
+            app:destination="@id/matchViewFragment" />
     </fragment>
 
 </navigation>

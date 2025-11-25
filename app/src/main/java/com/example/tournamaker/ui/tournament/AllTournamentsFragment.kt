@@ -26,7 +26,6 @@ class AllTournamentsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        setupListeners()
         setupObservers()
         viewModel.loadAllTournaments()
     }
@@ -43,13 +42,6 @@ class AllTournamentsFragment : Fragment() {
         }
     }
 
-    private fun setupListeners() {
-        binding.fabAddTournament.setOnClickListener {
-            findNavController().navigate(
-                AllTournamentsFragmentDirections.actionAllTournamentsFragmentToCreateTournament()
-            )
-        }
-    }
 
     private fun setupObservers() {
         viewModel.tournaments.observe(viewLifecycleOwner) { tournaments ->

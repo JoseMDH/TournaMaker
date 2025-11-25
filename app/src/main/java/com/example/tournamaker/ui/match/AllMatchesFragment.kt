@@ -28,7 +28,6 @@ class AllMatchesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        setupListeners()
         setupObservers()
         viewModel.loadAllMatches()
     }
@@ -42,14 +41,6 @@ class AllMatchesFragment : Fragment() {
         binding.rvMatches.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = matchAdapter
-        }
-    }
-
-    private fun setupListeners() {
-        binding.fabAddMatch.setOnClickListener {
-            findNavController().navigate(
-                AllMatchesFragmentDirections.actionAllMatchesFragmentToCreateMatch()
-            )
         }
     }
 
