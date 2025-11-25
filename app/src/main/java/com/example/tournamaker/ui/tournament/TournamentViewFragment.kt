@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.tournamaker.databinding.FragmentTournamentViewBinding
 import com.example.tournamaker.utils.hide
+import com.example.tournamaker.utils.loadImage
 import com.example.tournamaker.utils.show
 import com.example.tournamaker.viewModel.TournamentViewModel
 
@@ -37,22 +38,21 @@ class TournamentViewFragment : Fragment() {
     private fun setupObservers() {
         viewModel.selectedTournament.observe(viewLifecycleOwner) { tournament ->
             if (tournament != null) {
+                binding.ivTournamentImage.loadImage(tournament.image)
                 binding.tvTournamentName.text = tournament.name
-                binding.tvTournamentGame.text = tournament.game
                 binding.tvTournamentDescription.text = tournament.description
-                binding.tvTournamentDate.text = tournament.date
-                binding.tvTournamentPlace.text = tournament.place
-                binding.tvMaxParticipants.text = tournament.maxParticipants.toString()
+                binding.tvOrganizer.text = tournament.organizer
+                binding.tvPrizePool.text = tournament.prizePool
             }
         }
 
         viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
             if (isLoading) {
                 binding.progressBar.show()
-                binding.contentGroup.hide()
+                // Ocultamos el contenido principal mientras se carga
             } else {
                 binding.progressBar.hide()
-                binding.contentGroup.show()
+                // Mostramos el contenido una vez cargado
             }
         }
     }

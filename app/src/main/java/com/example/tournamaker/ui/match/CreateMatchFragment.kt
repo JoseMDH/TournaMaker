@@ -68,23 +68,27 @@ class CreateMatchFragment : Fragment() {
     }
 
     private fun createMatch() {
+        val name = binding.etMatchName.text.toString().trim()
+        val image = binding.etMatchImage.text.toString().trim()
         val team1Name = binding.etTeam1Name.text.toString().trim()
         val team2Name = binding.etTeam2Name.text.toString().trim()
         val date = binding.etMatchDate.text.toString().trim()
-        val round = binding.etMatchRound.text.toString().toIntOrNull() ?: 0
+        val hour = binding.etMatchHour.text.toString().trim()
         val tournamentId = args.tournamentId
 
-        if (team1Name.isEmpty() || team2Name.isEmpty() || date.isEmpty() || tournamentId == null) {
-            showToast("Los nombres de los equipos, la fecha y el torneo son obligatorios")
+        if (name.isEmpty() || team1Name.isEmpty() || team2Name.isEmpty() || date.isEmpty() || tournamentId == null) {
+            showToast("Todos los campos son obligatorios")
             return
         }
 
         val newMatch = Match(
+            name = name,
+            image = image,
             tournamentId = tournamentId,
             team1Name = team1Name,
             team2Name = team2Name,
             date = date,
-            round = round,
+            hour = hour,
             status = "PENDING"
         )
 

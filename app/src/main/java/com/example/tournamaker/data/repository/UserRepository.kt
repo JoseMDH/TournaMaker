@@ -51,21 +51,17 @@ class UserRepository {
 
     suspend fun registerUser(email: String, password: String, username: String, name: String): Result<User> {
         return try {
-            // 1. Crear el usuario en Firebase Authentication
             val authResult = auth.createUserWithEmailAndPassword(email, password).await()
             val firebaseUser = authResult.user!!
 
-            // 2. Crear nuestro objeto User para guardarlo en Firestore
             val newUser = User(
-                id = firebaseUser.uid, // Usar el UID de Firebase Auth como nuestro ID
+                id = firebaseUser.uid,
                 username = username,
                 name = name,
                 email = email,
-                password = "", // NUNCA guardar la contraseña en texto plano
-                avatar = "" // Puedes poner una URL de avatar por defecto aquí
+                avatar = "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" // URL de avatar por defecto
             )
 
-            // 3. Guardar el objeto User en la colección "users" de Firestore
             usersCollection.document(firebaseUser.uid).set(newUser).await()
             Result.success(newUser)
         } catch (e: Exception) {

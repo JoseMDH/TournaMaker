@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.tournamaker.R
 import com.example.tournamaker.data.model.Tournament
 import com.example.tournamaker.databinding.FragmentCreateTournamentBinding
 import com.example.tournamaker.utils.AuthManager
@@ -72,32 +71,30 @@ class CreateTournamentFragment : Fragment() {
 
     private fun createTournament() {
         val name = binding.etTournamentName.text.toString().trim()
-        val game = binding.etTournamentGame.text.toString().trim()
         val description = binding.etTournamentDescription.text.toString().trim()
+        val image = binding.etTournamentImage.text.toString().trim()
+        val organizer = binding.etOrganizer.text.toString().trim()
+        val prizePool = binding.etPrizePool.text.toString().trim()
+        val entryTax = binding.etEntryTax.text.toString().trim()
         val date = binding.etTournamentDate.text.toString().trim()
         val place = binding.etTournamentPlace.text.toString().trim()
-        val maxParticipants = binding.etMaxParticipants.text.toString().toIntOrNull() ?: 0
+        val teamsNum = binding.etTeamsNum.text.toString().toIntOrNull() ?: 0
 
-        if (name.isEmpty() || game.isEmpty()) {
-            showToast("El nombre y el juego son obligatorios")
-            return
-        }
-
-        val currentUser = authManager.getUser()
-        if (currentUser == null) {
-            showToast("Debes iniciar sesión para crear un torneo")
-            findNavController().navigate(R.id.loginFragment)
+        if (name.isEmpty() || organizer.isEmpty()) {
+            showToast("El nombre y el organizador son obligatorios")
             return
         }
 
         val newTournament = Tournament(
             name = name,
-            game = game,
             description = description,
+            image = image,
+            organizer = organizer,
+            prizePool = prizePool,
+            entryTax = entryTax,
             date = date,
             place = place,
-            maxParticipants = maxParticipants,
-            creatorId = currentUser.id
+            teamsNum = teamsNum
         )
 
         viewModel.createTournament(newTournament)

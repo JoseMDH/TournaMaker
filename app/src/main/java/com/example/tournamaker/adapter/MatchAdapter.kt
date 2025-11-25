@@ -3,9 +3,9 @@ package com.example.tournamaker.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.tournamaker.data.model.Match
-import com.example.tournamaker.databinding.ItemMatchCardBinding
+import com.example.tournamaker.databinding.ItemMatchBinding
+import com.example.tournamaker.utils.loadImage
 
 class MatchAdapter(
     private var matches: List<Match>,
@@ -13,7 +13,7 @@ class MatchAdapter(
 ) : RecyclerView.Adapter<MatchAdapter.MatchViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MatchViewHolder {
-        val binding = ItemMatchCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemMatchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MatchViewHolder(binding)
     }
 
@@ -32,18 +32,12 @@ class MatchAdapter(
         notifyDataSetChanged()
     }
 
-    inner class MatchViewHolder(private val binding: ItemMatchCardBinding) :
+    inner class MatchViewHolder(private val binding: ItemMatchBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(match: Match) {
-            binding.tvMatchName.text = "${match.team1Name} vs ${match.team2Name}"
-            binding.tvMatchDescription.text = "${match.team1Score} - ${match.team2Score} (${match.status})"
-
-            // Use Glide to load the image, with a placeholder
-            Glide.with(itemView.context)
-                .load(match.imageUrl)
-                .centerCrop()
-                .into(binding.ivMatchImage)
+            binding.tvMatchName.text = match.name
+            binding.ivMatchImage.loadImage(match.image)
         }
     }
 }
