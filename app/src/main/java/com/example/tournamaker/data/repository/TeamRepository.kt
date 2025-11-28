@@ -19,12 +19,19 @@ class TeamRepository {
         }
     }
 
-    suspend fun getTeamsByCreator(userId: String): List<Team> {
+    /**
+     * Fetches all teams where the user's username is in the 'participants' array.
+     */
+    suspend fun getTeamsByUserParticipation(username: String): List<Team> {
         return try {
-            teamsCollection.whereEqualTo("creatorId", userId).get().await().documents.mapNotNull {
-                it.toObject<Team>()?.copy(id = it.id)
-            }
+            teamsCollection.whereArrayContains("participants", username)
+                .get()
+                .await()
+                .documents.mapNotNull {
+                    it.toObject<Team>()?.copy(id = it.id)
+                }
         } catch (e: Exception) {
+            // Return empty list on error
             emptyList()
         }
     }

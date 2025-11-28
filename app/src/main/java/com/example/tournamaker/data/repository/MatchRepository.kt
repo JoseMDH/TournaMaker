@@ -45,14 +45,18 @@ class MatchRepository {
         }
     }
 
-    suspend fun getMatchesByTournamentIds(tournamentIds: List<String>): List<Match> {
-        if (tournamentIds.isEmpty()) {
+    suspend fun getMatchesByTeamIds(teamIds: List<String>): List<Match> {
+        if (teamIds.isEmpty()) {
             return emptyList()
         }
+
         return try {
-            matchesCollection.whereIn("tournamentId", tournamentIds).get().await().documents.mapNotNull {
-                it.toObject<Match>()?.copy(id = it.id)
-            }
+            val team1Matches = matchesCollection.whereIn("team1Id", teamIds).get().await()
+            val team2Matches = matchesCollection.whereIn("team2Id", teamIds).get().await()
+
+            val allMatches = team1Matches.documents + team2Matches.documents
+            // Use a Set to remove duplicates, then convert back to a List
+            allMatches.mapNotNull { it.toObject<Match>()?.copy(id = it.id) }.toSet().toList()
         } catch (e: Exception) {
             emptyList()
         }
