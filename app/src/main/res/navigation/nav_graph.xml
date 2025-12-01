@@ -153,6 +153,9 @@
         <action
             android:id="@+id/action_userPageFragment_to_myMatchesFragment"
             app:destination="@id/myMatchesFragment" />
+        <action
+            android:id="@+id/action_userPageFragment_to_personalDataFragment"
+            app:destination="@id/personalDataFragment" />
     </fragment>
 
     <fragment
@@ -194,5 +197,11 @@
             android:id="@+id/action_myMatchesFragment_to_matchViewFragment"
             app:destination="@id/matchViewFragment" />
     </fragment>
+    
+    <fragment
+        android:id="@+id/personalDataFragment"
+        android:name="com.example.tournamaker.ui.user.PersonalDataFragment"
+        android:label="Datos Personales"
+        tools:layout="@layout/fragment_personal_data" />
 
 </navigation>

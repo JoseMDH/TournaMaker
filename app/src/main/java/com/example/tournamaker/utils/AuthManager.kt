@@ -1,47 +1,52 @@
 package com.example.tournamaker.utils
 
 import android.content.Context
-import android.content.SharedPreferences
-import com.google.gson.Gson
 import com.example.tournamaker.data.model.User
+import com.google.firebase.auth.FirebaseAuth
+import com.google.gson.Gson
 
 class AuthManager private constructor(context: Context) {
-    private val prefs: SharedPreferences =
-        context.getSharedPreferences("tournamaker_prefs", Context.MODE_PRIVATE)
-    private val gson = Gson()
+
+    private val sharedPreferences = context.getSharedPreferences("AuthManager", Context.MODE_PRIVATE)
+    private val firebaseAuth = FirebaseAuth.getInstance()
+
+    fun saveUser(user: User) {
+        val userJson = Gson().toJson(user)
+        sharedPreferences.edit().putString("user", userJson).apply()
+    }
+
+    fun getUser(): User? {
+        val userJson = sharedPreferences.getString("user", null)
+        return if (userJson != null) {
+            Gson().fromJson(userJson, User::class.java)
+        } else {
+            null
+        }
+    }
+
+    fun isLoggedIn(): Boolean {
+        return getUser() != null
+    }
+
+    fun logout() {
+        firebaseAuth.signOut()
+        sharedPreferences.edit().remove("user").apply()
+    }
+
+    fun sendPasswordResetEmail(email: String, onComplete: () -> Unit) {
+        firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener {
+            onComplete()
+        }
+    }
 
     companion object {
-        private const val KEY_CURRENT_USER = "current_user"
-
         @Volatile
         private var INSTANCE: AuthManager? = null
 
         fun getInstance(context: Context): AuthManager {
             return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: AuthManager(context.applicationContext).also {
-                    INSTANCE = it
-                }
+                INSTANCE ?: AuthManager(context).also { INSTANCE = it }
             }
         }
-    }
-
-    fun setUser(user: User) {
-        val userJson = gson.toJson(user)
-        prefs.edit().putString(KEY_CURRENT_USER, userJson).apply()
-    }
-
-    fun getUser(): User? {
-        val userJson = prefs.getString(KEY_CURRENT_USER, null) ?: return null
-        return try {
-            gson.fromJson(userJson, User::class.java)
-        } catch (e: Exception) {
-            null
-        }
-    }
-
-    fun isLoggedIn(): Boolean = getUser() != null
-
-    fun logout() {
-        prefs.edit().remove(KEY_CURRENT_USER).apply()
     }
 }

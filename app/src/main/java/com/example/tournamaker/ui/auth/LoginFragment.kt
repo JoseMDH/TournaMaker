@@ -39,7 +39,7 @@ class LoginFragment : Fragment() {
         viewModel.loginResult.observe(viewLifecycleOwner) { result ->
             result.fold(
                 onSuccess = { user ->
-                    authManager.setUser(user)
+                    authManager.saveUser(user)
                     showToast("¡Bienvenido ${user.name}!")
                     findNavController().navigate(R.id.action_loginFragment_to_landingFragment)
                 },

@@ -45,7 +45,7 @@ class RegisterFragment : Fragment() {
         viewModel.registerResult.observe(viewLifecycleOwner) { result ->
             result.fold(
                 onSuccess = { user ->
-                    authManager.setUser(user)
+                    authManager.saveUser(user)
                     showToast("¡Registro exitoso! Bienvenido ${user.name}")
                     findNavController().navigate(R.id.action_registerFragment_to_landingFragment)
                 },

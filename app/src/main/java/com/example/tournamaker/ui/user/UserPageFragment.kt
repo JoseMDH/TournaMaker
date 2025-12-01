@@ -52,6 +52,7 @@ class UserPageFragment : Fragment() {
 
         val adapter = ProfileOptionsAdapter(options) { selectedOption ->
             when (selectedOption) {
+                "Datos Personales" -> findNavController().navigate(R.id.action_userPageFragment_to_personalDataFragment)
                 "Mis Equipos" -> findNavController().navigate(R.id.action_userPageFragment_to_myTeamsFragment)
                 "Mis Torneos" -> findNavController().navigate(R.id.action_userPageFragment_to_myTournamentsFragment)
                 "Mis Partidos" -> findNavController().navigate(R.id.action_userPageFragment_to_myMatchesFragment)
@@ -87,6 +88,7 @@ class UserPageFragment : Fragment() {
     private fun loadData() {
         val user = authManager.getUser()
         if (user != null) {
+            // Le pasamos el ID y el nombre de usuario, como requiere el ViewModel ahora
             viewModel.loadUserProfile(user.id, user.username)
         } else {
             authManager.logout()
