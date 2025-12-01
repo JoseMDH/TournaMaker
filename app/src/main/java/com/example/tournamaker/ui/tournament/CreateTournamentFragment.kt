@@ -80,6 +80,12 @@ class CreateTournamentFragment : Fragment() {
         val place = binding.etTournamentPlace.text.toString().trim()
         val teamsNum = binding.etTeamsNum.text.toString().toIntOrNull() ?: 0
 
+        val currentUser = authManager.getUser()
+        if (currentUser == null) {
+            showToast("Debes iniciar sesión para crear un torneo")
+            return
+        }
+
         if (name.isEmpty() || organizer.isEmpty()) {
             showToast("El nombre y el organizador son obligatorios")
             return
@@ -94,7 +100,8 @@ class CreateTournamentFragment : Fragment() {
             entryTax = entryTax,
             date = date,
             place = place,
-            teamsNum = teamsNum
+            teamsNum = teamsNum,
+            creatorId = currentUser.id
         )
 
         viewModel.createTournament(newTournament)

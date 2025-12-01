@@ -85,9 +85,9 @@ class UserPageFragment : Fragment() {
     }
 
     private fun loadData() {
-        val userId = authManager.getUser()?.id
-        if (userId != null) {
-            viewModel.loadUserProfile(userId)
+        val user = authManager.getUser()
+        if (user != null) {
+            viewModel.loadUserProfile(user.id, user.username)
         } else {
             authManager.logout()
             findNavController().navigate(R.id.action_global_loginFragment)

@@ -12,6 +12,7 @@ data class Tournament(
     val place: String = "",
     val image: String = "",
     val organizer: String = "",
+    val creatorId: String = "",
 
     @get:PropertyName("prize_pool") @set:PropertyName("prize_pool")
     var prizePool: String = "",
@@ -35,6 +36,7 @@ data class Tournament(
         place = "",
         image = "",
         organizer = "",
+        creatorId = "",
         prizePool = "",
         entryTax = "",
         teamsNum = 0,

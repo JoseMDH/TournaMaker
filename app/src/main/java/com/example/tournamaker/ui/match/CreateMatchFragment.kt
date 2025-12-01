@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.tournamaker.data.model.Match
 import com.example.tournamaker.databinding.FragmentCreateMatchBinding
+import com.example.tournamaker.utils.AuthManager
 import com.example.tournamaker.utils.hide
 import com.example.tournamaker.utils.show
 import com.example.tournamaker.utils.showToast
@@ -22,12 +23,14 @@ class CreateMatchFragment : Fragment() {
 
     private val viewModel: MatchViewModel by viewModels()
     private val args: CreateMatchFragmentArgs by navArgs()
+    private lateinit var authManager: AuthManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCreateMatchBinding.inflate(inflater, container, false)
+        authManager = AuthManager.getInstance(requireContext())
         return binding.root
     }
 
@@ -76,15 +79,22 @@ class CreateMatchFragment : Fragment() {
         val hour = binding.etMatchHour.text.toString().trim()
         val tournamentId = args.tournamentId
 
-        if (name.isEmpty() || team1Name.isEmpty() || team2Name.isEmpty() || date.isEmpty() || tournamentId == null) {
-            showToast("Todos los campos son obligatorios")
+        val currentUser = authManager.getUser()
+        if (currentUser == null) {
+            showToast("Debes iniciar sesión para crear un partido")
+            return
+        }
+
+        if (name.isEmpty() || team1Name.isEmpty() || team2Name.isEmpty() || date.isEmpty()) {
+            showToast("El nombre del partido, los equipos y la fecha son obligatorios")
             return
         }
 
         val newMatch = Match(
             name = name,
             image = image,
-            tournamentId = tournamentId,
+            tournamentId = tournamentId ?: "",
+            creatorId = currentUser.id,
             team1Name = team1Name,
             team2Name = team2Name,
             date = date,

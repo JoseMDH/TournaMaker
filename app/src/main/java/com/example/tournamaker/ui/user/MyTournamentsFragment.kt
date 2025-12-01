@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.tournamaker.R
 import com.example.tournamaker.adapter.TournamentAdapter
 import com.example.tournamaker.databinding.FragmentMyTournamentsBinding
 import com.example.tournamaker.utils.AuthManager
@@ -66,7 +67,11 @@ class MyTournamentsFragment : Fragment() {
 
     private fun loadData() {
         val user = authManager.getUser()
-        user?.id?.let { viewModel.loadUserProfile(it) }
+        if (user != null) {
+            viewModel.loadUserProfile(user.id, user.username)
+        } else {
+            findNavController().navigate(R.id.action_global_loginFragment)
+        }
     }
 
     override fun onDestroyView() {

@@ -66,7 +66,11 @@ class MyMatchesFragment : Fragment() {
 
     private fun loadData() {
         val user = authManager.getUser()
-        user?.id?.let { viewModel.loadUserProfile(it) }
+        if (user != null) {
+            viewModel.loadUserProfile(user.id, user.username)
+        } else {
+            findNavController().navigate(MyMatchesFragmentDirections.actionGlobalLoginFragment())
+        }
     }
 
     override fun onDestroyView() {

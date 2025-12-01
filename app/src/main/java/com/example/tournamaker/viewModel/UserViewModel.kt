@@ -16,10 +16,10 @@ import kotlinx.coroutines.launch
 
 class UserViewModel : ViewModel() {
 
-    private val userRepository = UserRepository()
     private val tournamentRepository = TournamentRepository()
     private val teamRepository = TeamRepository()
     private val matchRepository = MatchRepository()
+    private val userRepository = UserRepository()
 
     private val _user = MutableLiveData<User?>()
     val user: LiveData<User?> = _user
@@ -36,36 +36,25 @@ class UserViewModel : ViewModel() {
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
 
-    fun loadUserProfile(userId: String) {
+    fun loadUserProfile(userId: String, username: String) {
         viewModelScope.launch {
             _loading.value = true
             try {
-                val currentUser = userRepository.getById(userId)
-                _user.postValue(currentUser)
+                val userProfile = userRepository.getById(userId)
+                val tournaments = tournamentRepository.getTournamentsByCreator(userId)
+                val teams = teamRepository.getTeamsByParticipant(username)
+                val matches = matchRepository.getMatchesByCreator(userId)
 
-                if (currentUser != null) {
-                    // Load tournaments created by the user
-                    val tournaments = tournamentRepository.getTournamentsByCreator(userId)
-                    _userTournaments.postValue(tournaments)
+                _user.postValue(userProfile)
+                _userTournaments.postValue(tournaments)
+                _userTeams.postValue(teams)
+                _userMatches.postValue(matches)
 
-                    // Load teams the user participates in
-                    val teams = teamRepository.getTeamsByUserParticipation(currentUser.username)
-                    _userTeams.postValue(teams)
-
-                    // Load matches for the teams the user is in
-                    if (teams.isNotEmpty()) {
-                        val teamIds = teams.map { it.id }
-                        val matches = matchRepository.getMatchesByTeamIds(teamIds)
-                        _userMatches.postValue(matches)
-                    } else {
-                        _userMatches.postValue(emptyList()) // Post empty list if user has no teams
-                    }
-                }
             } catch (e: Exception) {
                 _user.postValue(null)
                 _userTournaments.postValue(emptyList())
                 _userTeams.postValue(emptyList())
-                _userMatches.postValue(emptyList()) // Post empty list on error
+                _userMatches.postValue(emptyList())
             }
             _loading.value = false
         }
