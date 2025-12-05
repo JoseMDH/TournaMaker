@@ -67,7 +67,10 @@ class MyMatchesFragment : Fragment() {
     private fun loadData() {
         val user = authManager.getUser()
         if (user != null) {
-            viewModel.loadUserProfile(user.id, user.username)
+            viewModel.loadUserProfile(
+                user.id,
+                username = user.username
+            )
         } else {
             findNavController().navigate(MyMatchesFragmentDirections.actionGlobalLoginFragment())
         }

@@ -34,17 +34,18 @@ class UserRepository {
 
     suspend fun loginUser(email: String, password: String): Result<User> {
         return try {
-            // 1. Autenticar al usuario con Firebase Authentication
             val authResult = auth.signInWithEmailAndPassword(email, password).await()
             val firebaseUser = authResult.user!!
 
-            // 2. Si la autenticación es exitosa, obtener los datos del perfil desde Firestore
+            if (!firebaseUser.isEmailVerified) {
+                return Result.failure(Exception("Por favor, verifica tu correo electrónico para poder iniciar sesión."))
+            }
+
             val userProfile = getById(firebaseUser.uid)
                 ?: return Result.failure(Exception("El perfil del usuario no fue encontrado."))
 
             Result.success(userProfile)
         } catch (e: Exception) {
-            // La excepción puede ser por contraseña incorrecta, usuario no encontrado, etc.
             Result.failure(Exception("El email o la contraseña son incorrectos."))
         }
     }
@@ -53,6 +54,7 @@ class UserRepository {
         return try {
             val authResult = auth.createUserWithEmailAndPassword(email, password).await()
             val firebaseUser = authResult.user!!
+            firebaseUser.sendEmailVerification().await()
 
             val newUser = User(
                 id = firebaseUser.uid,
