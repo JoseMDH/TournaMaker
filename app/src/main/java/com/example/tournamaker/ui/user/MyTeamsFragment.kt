@@ -42,9 +42,11 @@ class MyTeamsFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        teamAdapter = TeamAdapter(emptyList()) { team ->
-            val action = MyTeamsFragmentDirections.actionMyTeamsFragmentToTeamViewFragment(team.id)
-            findNavController().navigate(action)
+        teamAdapter = TeamAdapter(emptyList(), authManager.getUser()?.teamId) { team, action ->
+            if (action == "view") {
+                val navAction = MyTeamsFragmentDirections.actionMyTeamsFragmentToTeamViewFragment(team.id)
+                findNavController().navigate(navAction)
+            }
         }
         binding.rvMyTeams.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)

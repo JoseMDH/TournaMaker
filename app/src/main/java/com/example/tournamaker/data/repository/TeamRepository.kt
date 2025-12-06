@@ -1,7 +1,9 @@
 package com.example.tournamaker.data.repository
 
 import com.example.tournamaker.data.model.Team
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
 
@@ -45,6 +47,31 @@ class TeamRepository {
                 .toObject<Team>()?.copy(id = teamId)
         } catch (e: Exception) {
             null
+        }
+    }
+
+    suspend fun getAllTeams(limit: Int? = null): List<Team> {
+        return try {
+            var query: Query = teamsCollection
+
+            if (limit != null) {
+                query = query.limit(limit.toLong())
+            }
+
+            query.get().await().documents.mapNotNull {
+                it.toObject<Team>()?.copy(id = it.id)
+            }
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    suspend fun requestToJoinTeam(teamId: String, userId: String): Result<Unit> {
+        return try {
+            teamsCollection.document(teamId).update("requestedUsers", FieldValue.arrayUnion(userId)).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 }

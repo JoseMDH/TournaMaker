@@ -55,6 +55,14 @@
         <action
             android:id="@+id/action_landingFragment_to_matchView"
             app:destination="@id/matchViewFragment" />
+
+        <action
+            android:id="@+id/action_landingFragment_to_allTeamsFragment"
+            app:destination="@id/allTeamsFragment" />
+
+        <action
+            android:id="@+id/action_landingFragment_to_teamViewFragment"
+            app:destination="@id/teamViewFragment" />
     </fragment>
 
     <fragment
@@ -85,6 +93,17 @@
         <action
             android:id="@+id/action_allMatchesFragment_to_createMatch"
             app:destination="@id/createMatchFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/allTeamsFragment"
+        android:name="com.example.tournamaker.ui.team.AllTeamsFragment"
+        android:label="Equipos"
+        tools:layout="@layout/fragment_all_teams">
+
+        <action
+            android:id="@+id/action_allTeamsFragment_to_teamViewFragment"
+            app:destination="@id/teamViewFragment" />
     </fragment>
 
     <fragment

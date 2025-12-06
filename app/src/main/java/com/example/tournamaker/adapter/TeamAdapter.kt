@@ -5,11 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tournamaker.data.model.Team
 import com.example.tournamaker.databinding.ItemTeamBinding
+import com.example.tournamaker.utils.hide
 import com.example.tournamaker.utils.loadImage
+import com.example.tournamaker.utils.show
 
 class TeamAdapter(
     private var teams: List<Team>,
-    private val onTeamClickListener: (Team) -> Unit
+    private val currentUserTeamId: String?,
+    private val onTeamInteraction: (Team, String) -> Unit
 ) : RecyclerView.Adapter<TeamAdapter.TeamViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeamViewHolder {
@@ -21,7 +24,7 @@ class TeamAdapter(
         val team = teams[position]
         holder.bind(team)
         holder.itemView.setOnClickListener {
-            onTeamClickListener(team)
+            onTeamInteraction(team, "view")
         }
     }
 
@@ -38,6 +41,16 @@ class TeamAdapter(
         fun bind(team: Team) {
             binding.tvTeamName.text = team.name
             binding.ivTeamImage.loadImage(team.image)
+
+            if (currentUserTeamId.isNullOrEmpty() && !team.requestedUsers.contains(currentUserTeamId)) {
+                binding.btnJoinTeam.show()
+            } else {
+                binding.btnJoinTeam.hide()
+            }
+
+            binding.btnJoinTeam.setOnClickListener {
+                onTeamInteraction(team, "join")
+            }
         }
     }
 }

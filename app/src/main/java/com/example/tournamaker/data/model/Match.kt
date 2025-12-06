@@ -16,6 +16,7 @@ data class Match(
     val date: String = "",
     val hour: String = "",
     val status: String = "PENDING", // PENDING, IN_PROGRESS, FINISHED
+    val requestedTeams: List<String> = emptyList(),
 
     @ServerTimestamp
     val creationDate: Date? = null
@@ -33,6 +34,7 @@ data class Match(
         date = "",
         hour = "",
         status = "PENDING",
+        requestedTeams = emptyList(),
         creationDate = null
     )
 }

@@ -21,6 +21,9 @@ class MatchViewModel : ViewModel() {
     private val _creationResult = MutableLiveData<Result<Match>>()
     val creationResult: LiveData<Result<Match>> = _creationResult
 
+    private val _requestJoinResult = MutableLiveData<Result<Unit>>()
+    val requestJoinResult: LiveData<Result<Unit>> = _requestJoinResult
+
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
 
@@ -53,6 +56,15 @@ class MatchViewModel : ViewModel() {
             _loading.value = true
             val result = matchRepository.createMatch(match)
             _creationResult.postValue(result)
+            _loading.value = false
+        }
+    }
+
+    fun requestToJoinMatch(matchId: String, teamId: String) {
+        viewModelScope.launch {
+            _loading.value = true
+            val result = matchRepository.requestToJoinMatch(matchId, teamId)
+            _requestJoinResult.postValue(result)
             _loading.value = false
         }
     }

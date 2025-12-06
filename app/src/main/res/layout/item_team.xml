@@ -31,6 +31,14 @@
             android:gravity="center"
             tools:text="Nombre del Equipo" />
 
+        <Button
+            android:id="@+id/btn_join_team"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Join"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

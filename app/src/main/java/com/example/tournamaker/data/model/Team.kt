@@ -11,7 +11,8 @@ data class Team(
     var creatorId: String = "",
 
     val participants: List<String> = emptyList(),
-    val torneos: List<String> = emptyList()
+    val torneos: List<String> = emptyList(),
+    val requestedUsers: List<String> = emptyList()
 ) {
     constructor() : this(
         id = "",
@@ -19,6 +20,7 @@ data class Team(
         image = "",
         creatorId = "",
         participants = emptyList(),
-        torneos = emptyList()
+        torneos = emptyList(),
+        requestedUsers = emptyList()
     )
 }

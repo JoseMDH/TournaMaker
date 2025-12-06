@@ -1,6 +1,7 @@
 package com.example.tournamaker.data.repository
 
 import com.example.tournamaker.data.model.Match
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
@@ -65,6 +66,15 @@ class MatchRepository {
             }
         } catch (e: Exception) {
             emptyList()
+        }
+    }
+
+    suspend fun requestToJoinMatch(matchId: String, teamId: String): Result<Unit> {
+        return try {
+            matchesCollection.document(matchId).update("requestedTeams", FieldValue.arrayUnion(teamId)).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 }
