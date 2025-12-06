@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI // <-- Importante
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tournamaker.adapter.MatchAdapter
 import com.example.tournamaker.databinding.FragmentAllMatchesBinding
@@ -27,10 +29,21 @@ class AllMatchesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // --- CÓDIGO CLAVE AÑADIDO ---
+        // Configura la ActionBar/Toolbar de la Activity para este fragmento
+        (activity as? AppCompatActivity)?.supportActionBar?.let { actionBar ->
+            NavigationUI.setupActionBarWithNavController(activity as AppCompatActivity, findNavController())
+            actionBar.title = "Partidos Disponibles"
+        }
+        // -------------------------
+
         setupRecyclerView()
         setupObservers()
         viewModel.loadAllMatches()
     }
+
+    // Ya NO necesitamos la función setupToolbar()
 
     private fun setupRecyclerView() {
         matchAdapter = MatchAdapter(emptyList()) { match ->
@@ -47,7 +60,8 @@ class AllMatchesFragment : Fragment() {
     private fun setupObservers() {
         viewModel.matches.observe(viewLifecycleOwner) { matches ->
             matchAdapter.updateMatches(matches)
-            binding.tvMatchesCount.text = "Partidos: ${matches.size}"
+            // Podrías actualizar el título con el número de partidos si quisieras
+            // (activity as? AppCompatActivity)?.supportActionBar?.title = "Partidos (${matches.size})"
         }
 
         viewModel.loading.observe(viewLifecycleOwner) { isLoading ->

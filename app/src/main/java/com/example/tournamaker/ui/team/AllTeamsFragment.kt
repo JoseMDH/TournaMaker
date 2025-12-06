@@ -50,7 +50,8 @@ class AllTeamsFragment : Fragment() {
         }
         binding.rvTeams.apply {
             adapter = teamAdapter
-            layoutManager = LinearLayoutManager(requireContext())
+            layoutManager = androidx.recyclerview.widget.GridLayoutManager(requireContext(), 3)
+
         }
     }
 
