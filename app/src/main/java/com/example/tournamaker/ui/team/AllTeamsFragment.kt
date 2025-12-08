@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.tournamaker.R
 import com.example.tournamaker.adapter.TeamAdapter
 import com.example.tournamaker.databinding.FragmentAllTeamsBinding
 import com.example.tournamaker.utils.AuthManager
@@ -50,8 +51,7 @@ class AllTeamsFragment : Fragment() {
         }
         binding.rvTeams.apply {
             adapter = teamAdapter
-            layoutManager = androidx.recyclerview.widget.GridLayoutManager(requireContext(), 3)
-
+            layoutManager = LinearLayoutManager(requireContext())
         }
     }
 
@@ -72,8 +72,8 @@ class AllTeamsFragment : Fragment() {
 
         viewModel.requestJoinResult.observe(viewLifecycleOwner) { result ->
             result.fold(
-                onSuccess = { showToast("Request sent successfully") },
-                onFailure = { showToast("Error sending request") }
+                onSuccess = { showToast(getString(R.string.request_sent_successfully)) },
+                onFailure = { showToast(getString(R.string.error_sending_request)) }
             )
         }
     }

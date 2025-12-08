@@ -60,6 +60,18 @@ class TeamViewModel : ViewModel() {
         }
     }
 
+    fun loadTeamsByIds(teamIds: List<String>) {
+        viewModelScope.launch {
+            _loading.value = true
+            try {
+                _teams.postValue(teamRepository.getTeamsByIds(teamIds))
+            } catch (e: Exception) {
+                _teams.postValue(emptyList())
+            }
+            _loading.value = false
+        }
+    }
+
     fun requestToJoinTeam(teamId: String, userId: String) {
         viewModelScope.launch {
             _loading.value = true

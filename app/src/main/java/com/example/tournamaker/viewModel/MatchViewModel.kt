@@ -51,6 +51,18 @@ class MatchViewModel : ViewModel() {
         }
     }
 
+    fun loadMatchesByIds(matchIds: List<String>) {
+        viewModelScope.launch {
+            _loading.value = true
+            try {
+                _matches.postValue(matchRepository.getMatchesByIds(matchIds))
+            } catch (e: Exception) {
+                _matches.postValue(emptyList())
+            }
+            _loading.value = false
+        }
+    }
+
     fun createMatch(match: Match) {
         viewModelScope.launch {
             _loading.value = true
@@ -65,6 +77,24 @@ class MatchViewModel : ViewModel() {
             _loading.value = true
             val result = matchRepository.requestToJoinMatch(matchId, teamId)
             _requestJoinResult.postValue(result)
+            _loading.value = false
+        }
+    }
+
+    fun updateMatchStatus(matchId: String, status: String) {
+        viewModelScope.launch {
+            _loading.value = true
+            matchRepository.updateMatchStatus(matchId, status)
+            loadMatchById(matchId)
+            _loading.value = false
+        }
+    }
+
+    fun updateMatchScore(matchId: String, score1: Int, score2: Int) {
+        viewModelScope.launch {
+            _loading.value = true
+            matchRepository.updateMatchScore(matchId, score1, score2)
+            loadMatchById(matchId)
             _loading.value = false
         }
     }

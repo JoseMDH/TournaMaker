@@ -5,12 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tournamaker.data.model.Tournament
+import com.example.tournamaker.data.repository.TeamRepository
 import com.example.tournamaker.data.repository.TournamentRepository
 import kotlinx.coroutines.launch
 
 class TournamentViewModel : ViewModel() {
 
-    private val tournamentRepository = TournamentRepository()
+    private val tournamentRepository = TournamentRepository(TeamRepository())
 
     private val _tournaments = MutableLiveData<List<Tournament>>()
     val tournaments: LiveData<List<Tournament>> = _tournaments
@@ -20,6 +21,9 @@ class TournamentViewModel : ViewModel() {
 
     private val _creationResult = MutableLiveData<Result<Tournament>>()
     val creationResult: LiveData<Result<Tournament>> = _creationResult
+
+    private val _requestJoinResult = MutableLiveData<Result<Unit>>()
+    val requestJoinResult: LiveData<Result<Unit>> = _requestJoinResult
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
@@ -53,6 +57,16 @@ class TournamentViewModel : ViewModel() {
             _loading.value = true
             val result = tournamentRepository.createTournament(tournament)
             _creationResult.postValue(result)
+            _loading.value = false
+        }
+    }
+
+    fun requestToJoinTournament(tournamentId: String, teamId: String) {
+        viewModelScope.launch {
+            _loading.value = true
+            val result = tournamentRepository.requestToJoinTournament(tournamentId, teamId)
+            _requestJoinResult.postValue(result)
+            loadTournamentById(tournamentId)
             _loading.value = false
         }
     }

@@ -7,9 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.tournamaker.data.model.JoinRequest
-import com.example.tournamaker.data.model.RequestType
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.tournamaker.R
+import com.example.tournamaker.adapter.BracketAdapter
+import com.example.tournamaker.adapter.TeamAdapter
 import com.example.tournamaker.data.model.Team
 import com.example.tournamaker.databinding.FragmentTournamentViewBinding
 import com.example.tournamaker.utils.AuthManager
@@ -17,7 +21,8 @@ import com.example.tournamaker.utils.hide
 import com.example.tournamaker.utils.loadImage
 import com.example.tournamaker.utils.show
 import com.example.tournamaker.utils.showToast
-import com.example.tournamaker.viewModel.JoinRequestViewModel
+import com.example.tournamaker.viewModel.MatchViewModel
+import com.example.tournamaker.viewModel.TeamViewModel
 import com.example.tournamaker.viewModel.TournamentViewModel
 import com.example.tournamaker.viewModel.UserViewModel
 
@@ -28,9 +33,13 @@ class TournamentViewFragment : Fragment() {
 
     private val tournamentViewModel: TournamentViewModel by viewModels()
     private val userViewModel: UserViewModel by viewModels()
-    private val joinRequestViewModel: JoinRequestViewModel by viewModels()
+    private val matchViewModel: MatchViewModel by viewModels()
+    private val teamViewModel: TeamViewModel by viewModels()
     private val args: TournamentViewFragmentArgs by navArgs()
     private lateinit var authManager: AuthManager
+
+    private lateinit var teamAdapter: TeamAdapter
+    private lateinit var bracketAdapter: BracketAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,8 +52,28 @@ class TournamentViewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupRecyclerViews()
         setupObservers()
         loadData()
+    }
+
+    private fun setupRecyclerViews() {
+        teamAdapter = TeamAdapter(emptyList(), null) { team, _ ->
+            // Navigate to team view
+        }
+        binding.rvTeams.apply {
+            layoutManager = GridLayoutManager(context, 4)
+            adapter = teamAdapter
+        }
+
+        bracketAdapter = BracketAdapter(emptyList()) { match ->
+            val action = TournamentViewFragmentDirections.actionTournamentViewFragmentToMatchViewFragment(match.id)
+            findNavController().navigate(action)
+        }
+        binding.rvBracket.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = bracketAdapter
+        }
     }
 
     private fun setupObservers() {
@@ -53,11 +82,15 @@ class TournamentViewFragment : Fragment() {
                 binding.ivTournamentImage.loadImage(tournament.image)
                 binding.tvTournamentName.text = tournament.name
                 binding.tvTournamentDescription.text = tournament.description
+                binding.tvOrganizer.text = tournament.organizer
+                binding.tvPrizePool.text = tournament.prizePool
 
-                // Check user's teams to decide if the join button should be shown
+                teamViewModel.loadTeamsByIds(tournament.teams)
+                matchViewModel.loadMatchesByIds(tournament.rounds["round1"] ?: emptyList())
+
                 userViewModel.userTeams.observe(viewLifecycleOwner) { userTeams ->
-                    val eligibleTeams = userTeams.filter { !tournament.teams .contains(it.id) }
-                    if (eligibleTeams.isNotEmpty() && authManager.getUser()?.id != tournament.creatorId) {
+                    val eligibleTeams = userTeams.filter { !tournament.teams.contains(it.id) }
+                    if (eligibleTeams.isNotEmpty() && tournament.status == "open") {
                         binding.btnJoinRequest.show()
                         binding.btnJoinRequest.setOnClickListener {
                             showTeamSelectionDialog(eligibleTeams, tournament)
@@ -69,14 +102,22 @@ class TournamentViewFragment : Fragment() {
             }
         }
 
+        teamViewModel.teams.observe(viewLifecycleOwner) { teams ->
+            teamAdapter.updateTeams(teams)
+        }
+
+        matchViewModel.matches.observe(viewLifecycleOwner) { matches ->
+            bracketAdapter.updateMatches(matches)
+        }
+
         tournamentViewModel.loading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
 
-        joinRequestViewModel.requestResult.observe(viewLifecycleOwner) { result ->
+        tournamentViewModel.requestJoinResult.observe(viewLifecycleOwner) { result ->
             result.fold(
-                onSuccess = { showToast("Solicitud enviada correctamente") },
-                onFailure = { error -> showToast("Error al enviar la solicitud: ${error.message}") }
+                onSuccess = { showToast(getString(R.string.request_sent_successfully)) },
+                onFailure = { error -> showToast("${getString(R.string.error_sending_request)}: ${error.message}") }
             )
         }
     }
@@ -85,22 +126,12 @@ class TournamentViewFragment : Fragment() {
         val teamNames = teams.map { it.name }.toTypedArray()
 
         AlertDialog.Builder(requireContext())
-            .setTitle("Selecciona un equipo para unirte")
+            .setTitle(getString(R.string.select_a_team_to_join))
             .setItems(teamNames) { _, which ->
                 val selectedTeam = teams[which]
-                val currentUser = authManager.getUser()!!
-
-                val request = JoinRequest(
-                    type = RequestType.TOURNAMENT_JOIN,
-                    requesterId = selectedTeam.id, // The team is the requester
-                    requesterName = selectedTeam.name,
-                    targetId = tournament.id,
-                    targetName = tournament.name,
-                    ownerId = tournament.creatorId // The tournament creator is the owner
-                )
-                joinRequestViewModel.createJoinRequest(request)
+                tournamentViewModel.requestToJoinTournament(tournament.id, selectedTeam.id)
             }
-            .setNegativeButton("Cancelar", null)
+            .setNegativeButton(getString(R.string.cancel), null)
             .show()
     }
 

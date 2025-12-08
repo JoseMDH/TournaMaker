@@ -1,6 +1,7 @@
 package com.example.tournamaker.data.repository
 
 import com.example.tournamaker.data.model.Match
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -69,9 +70,43 @@ class MatchRepository {
         }
     }
 
+    suspend fun getMatchesByIds(matchIds: List<String>): List<Match> {
+        if (matchIds.isEmpty()) {
+            return emptyList()
+        }
+        return try {
+            matchesCollection.whereIn(FieldPath.documentId(), matchIds).get().await().documents.mapNotNull {
+                it.toObject<Match>()?.copy(id = it.id)
+            }
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
     suspend fun requestToJoinMatch(matchId: String, teamId: String): Result<Unit> {
         return try {
             matchesCollection.document(matchId).update("requestedTeams", FieldValue.arrayUnion(teamId)).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun updateMatchStatus(matchId: String, status: String): Result<Unit> {
+        return try {
+            matchesCollection.document(matchId).update("status", status).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun updateMatchScore(matchId: String, score1: Int, score2: Int): Result<Unit> {
+        return try {
+            matchesCollection.document(matchId).update(
+                "team1Score", score1,
+                "team2Score", score2
+            ).await()
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)

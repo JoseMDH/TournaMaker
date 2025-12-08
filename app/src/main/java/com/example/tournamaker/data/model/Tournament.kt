@@ -13,6 +13,7 @@ data class Tournament(
     val image: String = "",
     val organizer: String = "",
     val creatorId: String = "",
+    val status: String = "open",
 
     @get:PropertyName("prize_pool") @set:PropertyName("prize_pool")
     var prizePool: String = "",
@@ -24,6 +25,7 @@ data class Tournament(
     var teamsNum: Int = 0,
 
     val teams: List<String> = emptyList(),
+    val rounds: Map<String, List<String>> = emptyMap(),
 
     @ServerTimestamp
     val creationDate: Date? = null
@@ -37,10 +39,12 @@ data class Tournament(
         image = "",
         organizer = "",
         creatorId = "",
+        status = "open",
         prizePool = "",
         entryTax = "",
         teamsNum = 0,
         teams = emptyList(),
+        rounds = emptyMap(),
         creationDate = null
     )
 }

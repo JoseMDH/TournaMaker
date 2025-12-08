@@ -37,6 +37,19 @@
     <string name="tournamentDescription">Descripción del torneo</string>
     <string name="tournamentName">Nombre del torneo</string>
 
+    <string name="request_to_join">Solicitar unirse</string>
+    <string name="waiting">Esperando...</string>
+    <string name="start">Empezar</string>
+    <string name="finish">Finalizar</string>
+    <string name="update_score">Actualizar Marcador</string>
+    <string name="team_1_score">Puntuación Equipo 1</string>
+    <string name="team_2_score">Puntuación Equipo 2</string>
+    <string name="update">Actualizar</string>
+    <string name="coming_soon">Próximamente</string>
+    <string name="request_sent_successfully">Solicitud enviada correctamente</string>
+    <string name="error_sending_request">Error al enviar la solicitud</string>
+    <string name="select_a_team_to_join">Selecciona un equipo para unirte</string>
+
     <!-- Accessibility & Actions -->
     <string name="action_profile">Perfil de usuario</string>
     <string name="create_tournament">Crear Torneo</string>

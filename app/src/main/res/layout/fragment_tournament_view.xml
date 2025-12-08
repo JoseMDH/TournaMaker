@@ -12,81 +12,125 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/btn_join_request">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/iv_tournament_image"
-            android:layout_width="0dp"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/backgrounds/scenic" />
+            <ImageView
+                android:id="@+id/iv_tournament_image"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/backgrounds/scenic" />
 
-        <TextView
-            android:id="@+id/tv_tournament_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_tournament_image"
-            tools:text="Nombre del Torneo" />
+            <TextView
+                android:id="@+id/tv_tournament_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_tournament_image"
+                tools:text="Nombre del Torneo" />
 
-        <TextView
-            android:id="@+id/tv_tournament_description"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-            app:layout_constraintEnd_toEndOf="@+id/tv_tournament_name"
-            app:layout_constraintStart_toStartOf="@+id/tv_tournament_name"
-            app:layout_constraintTop_toBottomOf="@+id/tv_tournament_name"
-            tools:text="Descripción detallada del torneo..." />
+            <TextView
+                android:id="@+id/tv_tournament_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                app:layout_constraintEnd_toEndOf="@+id/tv_tournament_name"
+                app:layout_constraintStart_toStartOf="@+id/tv_tournament_name"
+                app:layout_constraintTop_toBottomOf="@+id/tv_tournament_name"
+                tools:text="Descripción detallada del torneo..." />
 
-        <TextView
-            android:id="@+id/tv_organizer_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Organizador:"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/tv_tournament_name"
-            app:layout_constraintTop_toBottomOf="@+id/tv_tournament_description" />
+            <TextView
+                android:id="@+id/tv_organizer_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Organizador:"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/tv_tournament_name"
+                app:layout_constraintTop_toBottomOf="@+id/tv_tournament_description" />
 
-        <TextView
-            android:id="@+id/tv_organizer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tv_organizer_label"
-            app:layout_constraintStart_toEndOf="@+id/tv_organizer_label"
-            tools:text="Federación de Videojuegos" />
+            <TextView
+                android:id="@+id/tv_organizer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tv_organizer_label"
+                app:layout_constraintStart_toEndOf="@+id/tv_organizer_label"
+                tools:text="Federación de Videojuegos" />
 
-        <TextView
-            android:id="@+id/tv_prize_pool_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Premio:"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/tv_organizer_label"
-            app:layout_constraintTop_toBottomOf="@+id/tv_organizer_label" />
+            <TextView
+                android:id="@+id/tv_prize_pool_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Premio:"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/tv_organizer_label"
+                app:layout_constraintTop_toBottomOf="@+id/tv_organizer_label" />
 
-        <TextView
-            android:id="@+id/tv_prize_pool"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tv_prize_pool_label"
-            app:layout_constraintStart_toEndOf="@+id/tv_prize_pool_label"
-            tools:text="€1000" />
+            <TextView
+                android:id="@+id/tv_prize_pool"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tv_prize_pool_label"
+                app:layout_constraintStart_toEndOf="@+id/tv_prize_pool_label"
+                tools:text="€1000" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/tv_teams_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Equipos Participantes:"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_prize_pool_label" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_teams"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_teams_label"
+                app:spanCount="4"
+                tools:listitem="@layout/item_team" />
+
+            <TextView
+                android:id="@+id/tv_bracket_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Enfrentamientos:"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rv_teams" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_bracket"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_bracket_label"
+                tools:listitem="@layout/item_match_card" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
     <com.google.android.material.button.MaterialButton

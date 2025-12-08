@@ -16,4 +16,6 @@
     <color name="background">#F5F5F5</color> <!-- Light gray for background -->
     <color name="background_dark">#121212</color>
     <color name="surface">#FFFFFF</color> <!-- White for cards/surfaces -->
+
+    <color name="grey">#808080</color>
 </resources>

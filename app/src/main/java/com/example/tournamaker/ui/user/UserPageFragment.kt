@@ -54,6 +54,7 @@ class UserPageFragment : Fragment() {
             when (selectedOption) {
                 "Datos Personales" -> findNavController().navigate(R.id.action_userPageFragment_to_personalDataFragment)
                 "Mis Equipos" -> findNavController().navigate(R.id.action_userPageFragment_to_myTeamsFragment)
+                "Mis Estadísticas" -> findNavController().navigate(R.id.action_userPageFragment_to_comingSoonFragment)
                 "Mis Torneos" -> findNavController().navigate(R.id.action_userPageFragment_to_myTournamentsFragment)
                 "Mis Partidos" -> findNavController().navigate(R.id.action_userPageFragment_to_myMatchesFragment)
                 else -> showToast("Opción seleccionada: $selectedOption")

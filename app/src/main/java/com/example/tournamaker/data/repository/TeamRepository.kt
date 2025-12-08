@@ -1,6 +1,7 @@
 package com.example.tournamaker.data.repository
 
 import com.example.tournamaker.data.model.Team
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -59,6 +60,19 @@ class TeamRepository {
             }
 
             query.get().await().documents.mapNotNull {
+                it.toObject<Team>()?.copy(id = it.id)
+            }
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    suspend fun getTeamsByIds(teamIds: List<String>): List<Team> {
+        if (teamIds.isEmpty()) {
+            return emptyList()
+        }
+        return try {
+            teamsCollection.whereIn(FieldPath.documentId(), teamIds).get().await().documents.mapNotNull {
                 it.toObject<Team>()?.copy(id = it.id)
             }
         } catch (e: Exception) {

@@ -115,6 +115,10 @@
         <argument
             android:name="tournamentId"
             app:argType="string" />
+
+        <action
+            android:id="@+id/action_tournamentViewFragment_to_matchViewFragment"
+            app:destination="@id/matchViewFragment" />
     </fragment>
 
     <fragment
@@ -175,6 +179,9 @@
         <action
             android:id="@+id/action_userPageFragment_to_personalDataFragment"
             app:destination="@id/personalDataFragment" />
+        <action
+            android:id="@+id/action_userPageFragment_to_comingSoonFragment"
+            app:destination="@id/comingSoonFragment" />
     </fragment>
 
     <fragment
@@ -228,5 +235,11 @@
         android:name="com.example.tournamaker.ui.notification.NotificationsFragment"
         android:label="Notificaciones"
         tools:layout="@layout/fragment_notifications" />
+
+    <fragment
+        android:id="@+id/comingSoonFragment"
+        android:name="com.example.tournamaker.ui.main.ComingSoonFragment"
+        android:label="Coming Soon"
+        tools:layout="@layout/fragment_coming_soon" />
 
 </navigation>

@@ -7,87 +7,160 @@
     android:padding="16dp"
     tools:context=".ui.match.MatchViewFragment">
 
+    <!-- Match Header -->
+    <TextView
+        android:id="@+id/tv_match_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+        android:textAlignment="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Gran Final" />
+
+    <ImageView
+        android:id="@+id/iv_match_image"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="8dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toBottomOf="@+id/tv_match_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:src="@tools:sample/backgrounds/scenic" />
+
+    <!-- Team 1 -->
+    <ImageView
+        android:id="@+id/iv_team1_placeholder"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/grey"
+        app:layout_constraintTop_toBottomOf="@+id/iv_match_image"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_team1_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="@+id/iv_team1_placeholder"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_team1_placeholder"
+        app:layout_constraintStart_toStartOf="@+id/iv_team1_placeholder"
+        app:layout_constraintEnd_toEndOf="@+id/iv_team1_placeholder" />
+
     <TextView
         android:id="@+id/tv_team1_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-        app:layout_constraintEnd_toStartOf="@+id/tv_score"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Equipo Alfa" />
+        android:layout_marginTop="8dp"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@+id/iv_team1_placeholder"
+        app:layout_constraintStart_toStartOf="@+id/iv_team1_placeholder"
+        app:layout_constraintEnd_toEndOf="@+id/iv_team1_placeholder"
+        tools:text="Equipo 1" />
+
+    <!-- Team 2 -->
+    <ImageView
+        android:id="@+id/iv_team2_placeholder"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@color/grey"
+        app:layout_constraintTop_toTopOf="@+id/iv_team1_placeholder"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_team2_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="@+id/iv_team2_placeholder"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_team2_placeholder"
+        app:layout_constraintStart_toStartOf="@+id/iv_team2_placeholder"
+        app:layout_constraintEnd_toEndOf="@+id/iv_team2_placeholder" />
 
     <TextView
         android:id="@+id/tv_team2_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-        app:layout_constraintEnd_toStartOf="@+id/tv_score"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_team1_name"
-        tools:text="Equipo Beta" />
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@+id/iv_team2_placeholder"
+        app:layout_constraintStart_toStartOf="@+id/iv_team2_placeholder"
+        app:layout_constraintEnd_toEndOf="@+id/iv_team2_placeholder"
+        tools:text="Equipo 2" />
 
+    <!-- Score -->
     <TextView
         android:id="@+id/tv_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_team2_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_team1_name"
-        tools:text="3 - 1" />
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+        app:layout_constraintTop_toTopOf="@+id/iv_team1_placeholder"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_team1_placeholder"
+        app:layout_constraintStart_toEndOf="@+id/iv_team1_placeholder"
+        app:layout_constraintEnd_toStartOf="@+id/iv_team2_placeholder"
+        tools:text="0 - 0" />
 
+    <!-- Match Info -->
     <TextView
-        android:id="@+id/tv_match_status_label"
+        android:id="@+id/tv_match_date_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Estado:"
-        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_team1_name"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_team2_name" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="15 de Enero, 2025 - 18:00" />
 
     <TextView
         android:id="@+id/tv_match_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tv_match_status_label"
-        app:layout_constraintStart_toEndOf="@+id/tv_match_status_label"
-        tools:text="Finalizado" />
-
-    <TextView
-        android:id="@+id/tv_match_date_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Fecha:"
-        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+        app:layout_constraintTop_toBottomOf="@+id/tv_match_date_time"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_match_status_label" />
-
-    <TextView
-        android:id="@+id/tv_match_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tv_match_date_label"
-        app:layout_constraintStart_toEndOf="@+id/tv_match_date_label"
-        tools:text="15 de Enero, 2025" />
-
-    <Button
-        android:id="@+id/btn_request_to_join"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Request to Join"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_match_date"
-        tools:visibility="visible" />
+        tools:text="PENDING" />
 
+    <!-- Action Buttons -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_start_match"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="@string/start"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_finish_match"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="@string/finish"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_join_match"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="@string/request_to_join"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
