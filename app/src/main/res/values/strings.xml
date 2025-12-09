@@ -37,7 +37,7 @@
     <string name="tournamentDescription">Descripción del torneo</string>
     <string name="tournamentName">Nombre del torneo</string>
 
-    <string name="request_to_join">Solicitar unirse</string>
+    <string name="request_to_join">Unirse</string>
     <string name="waiting">Esperando...</string>
     <string name="start">Empezar</string>
     <string name="finish">Finalizar</string>
@@ -49,6 +49,9 @@
     <string name="request_sent_successfully">Solicitud enviada correctamente</string>
     <string name="error_sending_request">Error al enviar la solicitud</string>
     <string name="select_a_team_to_join">Selecciona un equipo para unirte</string>
+    <string name="show_requests">Mostrar Solicitudes</string>
+    <string name="joined_successfully">Te has unido al torneo</string>
+    <string name="error_joining">Error al unirse al torneo</string>
 
     <!-- Accessibility & Actions -->
     <string name="action_profile">Perfil de usuario</string>

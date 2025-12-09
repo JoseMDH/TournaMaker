@@ -1,6 +1,7 @@
 package com.example.tournamaker.data.repository
 
 import com.example.tournamaker.data.model.Match
+import com.example.tournamaker.data.model.Team
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -8,7 +9,9 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
 
-class MatchRepository {
+class MatchRepository(
+    private val teamRepository: TeamRepository = TeamRepository()
+) {
 
     private val firestore = FirebaseFirestore.getInstance()
     private val matchesCollection = firestore.collection("matches")
@@ -83,10 +86,31 @@ class MatchRepository {
         }
     }
 
-    suspend fun requestToJoinMatch(matchId: String, teamId: String): Result<Unit> {
+    suspend fun joinMatch(matchId: String, teamId: String): Result<Unit> {
         return try {
-            matchesCollection.document(matchId).update("requestedTeams", FieldValue.arrayUnion(teamId)).await()
-            Result.success(Unit)
+            val match = getMatchById(matchId)
+            val team = teamRepository.getTeamById(teamId)
+            if (match != null && team != null) {
+                if (match.team1Id == null) {
+                    matchesCollection.document(matchId).update(
+                        "team1Id", team.id,
+                        "team1Name", team.name,
+                        "team1Image", team.image
+                    ).await()
+                    Result.success(Unit)
+                } else if (match.team2Id == null) {
+                    matchesCollection.document(matchId).update(
+                        "team2Id", team.id,
+                        "team2Name", team.name,
+                        "team2Image", team.image
+                    ).await()
+                    Result.success(Unit)
+                } else {
+                    Result.failure(Exception("Match is full"))
+                }
+            } else {
+                Result.failure(Exception("Match or team not found"))
+            }
         } catch (e: Exception) {
             Result.failure(e)
         }

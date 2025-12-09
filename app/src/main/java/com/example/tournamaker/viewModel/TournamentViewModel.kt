@@ -22,8 +22,8 @@ class TournamentViewModel : ViewModel() {
     private val _creationResult = MutableLiveData<Result<Tournament>>()
     val creationResult: LiveData<Result<Tournament>> = _creationResult
 
-    private val _requestJoinResult = MutableLiveData<Result<Unit>>()
-    val requestJoinResult: LiveData<Result<Unit>> = _requestJoinResult
+    private val _joinResult = MutableLiveData<Result<Unit>>()
+    val joinResult: LiveData<Result<Unit>> = _joinResult
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
@@ -61,11 +61,11 @@ class TournamentViewModel : ViewModel() {
         }
     }
 
-    fun requestToJoinTournament(tournamentId: String, teamId: String) {
+    fun joinTournament(tournamentId: String, teamId: String) {
         viewModelScope.launch {
             _loading.value = true
-            val result = tournamentRepository.requestToJoinTournament(tournamentId, teamId)
-            _requestJoinResult.postValue(result)
+            val result = tournamentRepository.joinTournament(tournamentId, teamId)
+            _joinResult.postValue(result)
             loadTournamentById(tournamentId)
             _loading.value = false
         }

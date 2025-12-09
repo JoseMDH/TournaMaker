@@ -6,11 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tournamaker.data.model.Match
 import com.example.tournamaker.data.repository.MatchRepository
+import com.example.tournamaker.data.repository.TeamRepository
 import kotlinx.coroutines.launch
 
 class MatchViewModel : ViewModel() {
 
-    private val matchRepository = MatchRepository()
+    private val matchRepository = MatchRepository(TeamRepository())
 
     private val _matches = MutableLiveData<List<Match>>()
     val matches: LiveData<List<Match>> = _matches
@@ -21,8 +22,8 @@ class MatchViewModel : ViewModel() {
     private val _creationResult = MutableLiveData<Result<Match>>()
     val creationResult: LiveData<Result<Match>> = _creationResult
 
-    private val _requestJoinResult = MutableLiveData<Result<Unit>>()
-    val requestJoinResult: LiveData<Result<Unit>> = _requestJoinResult
+    private val _joinResult = MutableLiveData<Result<Unit>>()
+    val joinResult: LiveData<Result<Unit>> = _joinResult
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
@@ -72,11 +73,12 @@ class MatchViewModel : ViewModel() {
         }
     }
 
-    fun requestToJoinMatch(matchId: String, teamId: String) {
+    fun joinMatch(matchId: String, teamId: String) {
         viewModelScope.launch {
             _loading.value = true
-            val result = matchRepository.requestToJoinMatch(matchId, teamId)
-            _requestJoinResult.postValue(result)
+            val result = matchRepository.joinMatch(matchId, teamId)
+            _joinResult.postValue(result)
+            loadMatchById(matchId)
             _loading.value = false
         }
     }

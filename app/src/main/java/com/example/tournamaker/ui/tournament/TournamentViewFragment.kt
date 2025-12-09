@@ -90,7 +90,8 @@ class TournamentViewFragment : Fragment() {
 
                 userViewModel.userTeams.observe(viewLifecycleOwner) { userTeams ->
                     val eligibleTeams = userTeams.filter { !tournament.teams.contains(it.id) }
-                    if (eligibleTeams.isNotEmpty() && tournament.status == "open") {
+                    val isCreator = authManager.getUser()?.id == tournament.creatorId
+                    if (eligibleTeams.isNotEmpty() && tournament.status == "open" && !isCreator) {
                         binding.btnJoinRequest.show()
                         binding.btnJoinRequest.setOnClickListener {
                             showTeamSelectionDialog(eligibleTeams, tournament)
@@ -114,10 +115,10 @@ class TournamentViewFragment : Fragment() {
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
 
-        tournamentViewModel.requestJoinResult.observe(viewLifecycleOwner) { result ->
+        tournamentViewModel.joinResult.observe(viewLifecycleOwner) { result ->
             result.fold(
-                onSuccess = { showToast(getString(R.string.request_sent_successfully)) },
-                onFailure = { error -> showToast("${getString(R.string.error_sending_request)}: ${error.message}") }
+                onSuccess = { showToast(getString(R.string.joined_successfully)) },
+                onFailure = { error -> showToast("${getString(R.string.error_joining)}: ${error.message}") }
             )
         }
     }
@@ -129,7 +130,7 @@ class TournamentViewFragment : Fragment() {
             .setTitle(getString(R.string.select_a_team_to_join))
             .setItems(teamNames) { _, which ->
                 val selectedTeam = teams[which]
-                tournamentViewModel.requestToJoinTournament(tournament.id, selectedTeam.id)
+                tournamentViewModel.joinTournament(tournament.id, selectedTeam.id)
             }
             .setNegativeButton(getString(R.string.cancel), null)
             .show()

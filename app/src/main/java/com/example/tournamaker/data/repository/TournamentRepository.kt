@@ -82,7 +82,7 @@ class TournamentRepository(
         }
     }
 
-    suspend fun requestToJoinTournament(tournamentId: String, teamId: String): Result<Unit> {
+    suspend fun joinTournament(tournamentId: String, teamId: String): Result<Unit> {
         return try {
             val tournament = getTournamentById(tournamentId)
             val team = teamRepository.getTeamById(teamId)

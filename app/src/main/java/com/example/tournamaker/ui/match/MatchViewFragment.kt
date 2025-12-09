@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.tournamaker.R
 import com.example.tournamaker.data.model.Match
+import com.example.tournamaker.data.model.Team
 import com.example.tournamaker.databinding.FragmentMatchViewBinding
 import com.example.tournamaker.utils.AuthManager
 import com.example.tournamaker.utils.hide
@@ -18,6 +19,7 @@ import com.example.tournamaker.utils.loadImage
 import com.example.tournamaker.utils.show
 import com.example.tournamaker.utils.showToast
 import com.example.tournamaker.viewModel.MatchViewModel
+import com.example.tournamaker.viewModel.UserViewModel
 
 class MatchViewFragment : Fragment() {
 
@@ -25,6 +27,7 @@ class MatchViewFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: MatchViewModel by viewModels()
+    private val userViewModel: UserViewModel by viewModels()
     private val args: MatchViewFragmentArgs by navArgs()
     private lateinit var authManager: AuthManager
 
@@ -54,10 +57,10 @@ class MatchViewFragment : Fragment() {
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
 
-        viewModel.requestJoinResult.observe(viewLifecycleOwner) { result ->
+        viewModel.joinResult.observe(viewLifecycleOwner) { result ->
             result.fold(
-                onSuccess = { showToast(getString(R.string.request_sent_successfully)) },
-                onFailure = { error -> showToast("${getString(R.string.error_sending_request)}: ${error.message}") }
+                onSuccess = { showToast(getString(R.string.joined_successfully)) },
+                onFailure = { error -> showToast("${getString(R.string.error_joining)}: ${error.message}") }
             )
         }
     }
@@ -72,22 +75,18 @@ class MatchViewFragment : Fragment() {
         if (match.team1Id != null) {
             binding.tvTeam1Name.text = match.team1Name
             binding.ivTeam1Image.loadImage(match.team1Image)
-            binding.ivTeam1Placeholder.hide()
         } else {
             binding.tvTeam1Name.text = getString(R.string.waiting)
             binding.ivTeam1Image.setImageResource(R.color.grey)
-            binding.ivTeam1Placeholder.show()
         }
 
         // Team 2
         if (match.team2Id != null) {
             binding.tvTeam2Name.text = match.team2Name
             binding.ivTeam2Image.loadImage(match.team2Image)
-            binding.ivTeam2Placeholder.hide()
         } else {
             binding.tvTeam2Name.text = getString(R.string.waiting)
             binding.ivTeam2Image.setImageResource(R.color.grey)
-            binding.ivTeam2Placeholder.show()
         }
 
         binding.tvScore.text = "${match.team1Score} - ${match.team2Score}"
@@ -129,8 +128,28 @@ class MatchViewFragment : Fragment() {
         }
 
         binding.btnJoinMatch.setOnClickListener {
-            // Implement join logic
+            userViewModel.userTeams.observe(viewLifecycleOwner) { userTeams ->
+                val eligibleTeams = userTeams.filter { it.id != match.team1Id && it.id != match.team2Id }
+                if (eligibleTeams.isNotEmpty()) {
+                    showTeamSelectionDialog(eligibleTeams, match)
+                } else {
+                    showToast("No eligible teams to join")
+                }
+            }
         }
+    }
+
+    private fun showTeamSelectionDialog(teams: List<Team>, match: Match) {
+        val teamNames = teams.map { it.name }.toTypedArray()
+
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.select_a_team_to_join))
+            .setItems(teamNames) { _, which ->
+                val selectedTeam = teams[which]
+                viewModel.joinMatch(match.id, selectedTeam.id)
+            }
+            .setNegativeButton(getString(R.string.cancel), null)
+            .show()
     }
 
     private fun showUpdateScoreDialog(match: Match) {
@@ -155,6 +174,10 @@ class MatchViewFragment : Fragment() {
 
     private fun loadData() {
         viewModel.loadMatchById(args.matchId)
+        val currentUser = authManager.getUser()
+        if (currentUser != null) {
+            userViewModel.loadUserProfile(currentUser.id, currentUser.username)
+        }
     }
 
     override fun onDestroyView() {

@@ -32,23 +32,14 @@
 
     <!-- Team 1 -->
     <ImageView
-        android:id="@+id/iv_team1_placeholder"
+        android:id="@+id/iv_team1_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="16dp"
         android:background="@color/grey"
+        android:scaleType="centerCrop"
         app:layout_constraintTop_toBottomOf="@+id/iv_match_image"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/iv_team1_image"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintTop_toTopOf="@+id/iv_team1_placeholder"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_team1_placeholder"
-        app:layout_constraintStart_toStartOf="@+id/iv_team1_placeholder"
-        app:layout_constraintEnd_toEndOf="@+id/iv_team1_placeholder" />
 
     <TextView
         android:id="@+id/tv_team1_name"
@@ -56,29 +47,20 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textAlignment="center"
-        app:layout_constraintTop_toBottomOf="@+id/iv_team1_placeholder"
-        app:layout_constraintStart_toStartOf="@+id/iv_team1_placeholder"
-        app:layout_constraintEnd_toEndOf="@+id/iv_team1_placeholder"
+        app:layout_constraintTop_toBottomOf="@+id/iv_team1_image"
+        app:layout_constraintStart_toStartOf="@+id/iv_team1_image"
+        app:layout_constraintEnd_toEndOf="@+id/iv_team1_image"
         tools:text="Equipo 1" />
 
     <!-- Team 2 -->
     <ImageView
-        android:id="@+id/iv_team2_placeholder"
+        android:id="@+id/iv_team2_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:background="@color/grey"
-        app:layout_constraintTop_toTopOf="@+id/iv_team1_placeholder"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <ImageView
-        android:id="@+id/iv_team2_image"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
         android:scaleType="centerCrop"
-        app:layout_constraintTop_toTopOf="@+id/iv_team2_placeholder"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_team2_placeholder"
-        app:layout_constraintStart_toStartOf="@+id/iv_team2_placeholder"
-        app:layout_constraintEnd_toEndOf="@+id/iv_team2_placeholder" />
+        app:layout_constraintTop_toTopOf="@+id/iv_team1_image"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/tv_team2_name"
@@ -86,9 +68,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textAlignment="center"
-        app:layout_constraintTop_toBottomOf="@+id/iv_team2_placeholder"
-        app:layout_constraintStart_toStartOf="@+id/iv_team2_placeholder"
-        app:layout_constraintEnd_toEndOf="@+id/iv_team2_placeholder"
+        app:layout_constraintTop_toBottomOf="@+id/iv_team2_image"
+        app:layout_constraintStart_toStartOf="@+id/iv_team2_image"
+        app:layout_constraintEnd_toEndOf="@+id/iv_team2_image"
         tools:text="Equipo 2" />
 
     <!-- Score -->
@@ -97,10 +79,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-        app:layout_constraintTop_toTopOf="@+id/iv_team1_placeholder"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_team1_placeholder"
-        app:layout_constraintStart_toEndOf="@+id/iv_team1_placeholder"
-        app:layout_constraintEnd_toStartOf="@+id/iv_team2_placeholder"
+        app:layout_constraintTop_toTopOf="@+id/iv_team1_image"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_team1_image"
+        app:layout_constraintStart_toEndOf="@+id/iv_team1_image"
+        app:layout_constraintEnd_toStartOf="@+id/iv_team2_image"
         tools:text="0 - 0" />
 
     <!-- Match Info -->
