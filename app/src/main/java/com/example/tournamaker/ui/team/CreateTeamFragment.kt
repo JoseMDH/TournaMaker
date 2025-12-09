@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.tournamaker.data.model.Team
@@ -13,13 +14,18 @@ import com.example.tournamaker.utils.AuthManager
 import com.example.tournamaker.utils.hide
 import com.example.tournamaker.utils.show
 import com.example.tournamaker.utils.showToast
+import com.example.tournamaker.viewModel.NotificationViewModel
 import com.example.tournamaker.viewModel.TeamViewModel
+import com.example.tournamaker.viewModel.TeamViewModelFactory
 
 class CreateTeamFragment : Fragment() {
     private var _binding: FragmentCreateTeamBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: TeamViewModel by viewModels()
+    private val notificationViewModel: NotificationViewModel by activityViewModels()
+    private val viewModel: TeamViewModel by viewModels {
+        TeamViewModelFactory(notificationViewModel)
+    }
     private lateinit var authManager: AuthManager
 
     override fun onCreateView(
