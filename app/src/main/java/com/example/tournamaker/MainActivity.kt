@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.navigation.NavController
@@ -13,12 +14,19 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.tournamaker.databinding.ActivityMainBinding
 import com.example.tournamaker.utils.AuthManager
+import com.example.tournamaker.viewModel.NotificationViewModel
+import com.example.tournamaker.viewModel.NotificationViewModelFactory
+import com.google.android.material.badge.BadgeDrawable
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var authManager: AuthManager
     private lateinit var appBarConfiguration: AppBarConfiguration
+
+    private val notificationViewModel: NotificationViewModel by viewModels {
+        NotificationViewModelFactory(AuthManager.getInstance(this))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +38,7 @@ class MainActivity : AppCompatActivity() {
 
         setupNavigationAndUi()
         setupFab()
+        setupNotificationBadge()
     }
 
     private fun setupNavigationAndUi() {
@@ -54,6 +63,10 @@ class MainActivity : AppCompatActivity() {
                 binding.fab.show()
                 binding.fabHome.show()
             }
+
+            if (destination.id == R.id.notificationsFragment) {
+                notificationViewModel.markAllNotificationsAsRead()
+            }
         }
 
         checkUserAuthentication()
@@ -74,6 +87,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupNotificationBadge() {
+        notificationViewModel.fetchUnreadNotificationCount()
+        notificationViewModel.unreadCount.observe(this) { count ->
+            val notificationsMenuItem = binding.toolbar.menu.findItem(R.id.notificationsFragment)
+            if (notificationsMenuItem != null) {
+                if (count > 0) {
+                    val badge = BadgeDrawable.create(this)
+                    badge.number = count
+                    notificationsMenuItem.icon = badge
+                } else {
+                    notificationsMenuItem.icon = getDrawable(R.drawable.ic_notifications)
+                }
+            }
+        }
+    }
+
     private fun checkUserAuthentication() {
         if (!authManager.isLoggedIn()) {
             navController.navigate(R.id.loginFragment)
@@ -82,6 +111,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
+        setupNotificationBadge() // Re-setup badge on menu creation
         return true
     }
 

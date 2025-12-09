@@ -16,6 +16,9 @@ class NotificationViewModel(private val authManager: AuthManager) : ViewModel() 
     private val _notifications = MutableLiveData<List<Notification>>()
     val notifications: LiveData<List<Notification>> = _notifications
 
+    private val _unreadCount = MutableLiveData<Int>()
+    val unreadCount: LiveData<Int> = _unreadCount
+
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
 
@@ -35,6 +38,26 @@ class NotificationViewModel(private val authManager: AuthManager) : ViewModel() 
         viewModelScope.launch {
             val notification = Notification(userId = userId, message = message)
             notificationRepository.createNotification(notification)
+        }
+    }
+
+    fun fetchUnreadNotificationCount() {
+        viewModelScope.launch {
+            val userId = authManager.getUser()?.id
+            if (userId != null) {
+                val count = notificationRepository.countUnreadNotifications(userId)
+                _unreadCount.postValue(count)
+            }
+        }
+    }
+
+    fun markAllNotificationsAsRead() {
+        viewModelScope.launch {
+            val userId = authManager.getUser()?.id
+            if (userId != null) {
+                notificationRepository.markAllAsRead(userId)
+                _unreadCount.postValue(0)
+            }
         }
     }
 }

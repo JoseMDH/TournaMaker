@@ -29,4 +29,35 @@ class NotificationRepository {
             emptyList()
         }
     }
+
+    suspend fun countUnreadNotifications(userId: String): Int {
+        return try {
+            val query = notificationsCollection
+                .whereEqualTo("userId", userId)
+                .whereEqualTo("isRead", false)
+                .get()
+                .await()
+            query.size()
+        } catch (e: Exception) {
+            0
+        }
+    }
+
+    suspend fun markAllAsRead(userId: String) {
+        try {
+            val unreadNotifications = notificationsCollection
+                .whereEqualTo("userId", userId)
+                .whereEqualTo("isRead", false)
+                .get()
+                .await()
+
+            val batch = firestore.batch()
+            for (document in unreadNotifications.documents) {
+                batch.update(document.reference, "isRead", true)
+            }
+            batch.commit().await()
+        } catch (e: Exception) {
+            // Handle error
+        }
+    }
 }
