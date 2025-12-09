@@ -5,21 +5,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI // <-- Importante
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.tournamaker.R
 import com.example.tournamaker.adapter.MatchAdapter
 import com.example.tournamaker.databinding.FragmentAllMatchesBinding
+import com.example.tournamaker.utils.AuthManager
 import com.example.tournamaker.utils.hide
 import com.example.tournamaker.utils.show
 import com.example.tournamaker.viewModel.MatchViewModel
+import com.example.tournamaker.viewModel.MatchViewModelFactory
+import com.example.tournamaker.viewModel.NotificationViewModel
+import com.example.tournamaker.viewModel.NotificationViewModelFactory
 
 class AllMatchesFragment : Fragment() {
     private var _binding: FragmentAllMatchesBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: MatchViewModel by viewModels()
+    private val notificationViewModel: NotificationViewModel by viewModels { 
+        NotificationViewModelFactory(AuthManager.getInstance(requireContext())) 
+    }
+    private val viewModel: MatchViewModel by viewModels { 
+        MatchViewModelFactory(notificationViewModel) 
+    }
     private lateinit var matchAdapter: MatchAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -47,9 +58,8 @@ class AllMatchesFragment : Fragment() {
 
     private fun setupRecyclerView() {
         matchAdapter = MatchAdapter(emptyList()) { match ->
-            val action = AllMatchesFragmentDirections
-                .actionAllMatchesFragmentToMatchView(match.id)
-            findNavController().navigate(action)
+            val bundle = bundleOf("matchId" to match.id)
+            findNavController().navigate(R.id.action_allMatchesFragment_to_matchView, bundle)
         }
         binding.rvMatches.apply {
             layoutManager = LinearLayoutManager(requireContext())

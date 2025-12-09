@@ -4,10 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
+import com.example.tournamaker.R
 import com.example.tournamaker.data.model.Match
 import com.example.tournamaker.databinding.FragmentCreateMatchBinding
 import com.example.tournamaker.utils.AuthManager
@@ -15,14 +16,21 @@ import com.example.tournamaker.utils.hide
 import com.example.tournamaker.utils.show
 import com.example.tournamaker.utils.showToast
 import com.example.tournamaker.viewModel.MatchViewModel
+import com.example.tournamaker.viewModel.MatchViewModelFactory
+import com.example.tournamaker.viewModel.NotificationViewModel
+import com.example.tournamaker.viewModel.NotificationViewModelFactory
 
 class CreateMatchFragment : Fragment() {
 
     private var _binding: FragmentCreateMatchBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MatchViewModel by viewModels()
-    private val args: CreateMatchFragmentArgs by navArgs()
+    private val notificationViewModel: NotificationViewModel by viewModels { 
+        NotificationViewModelFactory(AuthManager.getInstance(requireContext())) 
+    }
+    private val viewModel: MatchViewModel by viewModels { 
+        MatchViewModelFactory(notificationViewModel) 
+    }
     private lateinit var authManager: AuthManager
 
     override fun onCreateView(
@@ -75,7 +83,7 @@ class CreateMatchFragment : Fragment() {
         val image = binding.etMatchImage.text.toString().trim()
         val date = binding.etMatchDate.text.toString().trim()
         val hour = binding.etMatchHour.text.toString().trim()
-        val tournamentId = args.tournamentId
+        val tournamentId = arguments?.getString("tournamentId")
 
         val currentUser = authManager.getUser()
         if (currentUser == null) {

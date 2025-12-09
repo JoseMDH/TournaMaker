@@ -9,9 +9,12 @@ import com.example.tournamaker.data.repository.MatchRepository
 import com.example.tournamaker.data.repository.TeamRepository
 import kotlinx.coroutines.launch
 
-class MatchViewModel : ViewModel() {
+class MatchViewModel(
+    private val notificationViewModel: NotificationViewModel
+) : ViewModel() {
 
-    private val matchRepository = MatchRepository(TeamRepository())
+    private val teamRepository = TeamRepository()
+    private val matchRepository = MatchRepository(teamRepository)
 
     private val _matches = MutableLiveData<List<Match>>()
     val matches: LiveData<List<Match>> = _matches
@@ -77,6 +80,19 @@ class MatchViewModel : ViewModel() {
         viewModelScope.launch {
             _loading.value = true
             val result = matchRepository.joinMatch(matchId, teamId)
+            if (result.isSuccess) {
+                val match = matchRepository.getMatchById(matchId)
+                val team = teamRepository.getTeamById(teamId)
+                if (match != null && team != null) {
+                    val creatorId = match.creatorId
+                    if (creatorId != null) {
+                        notificationViewModel.createNotification(
+                            userId = creatorId,
+                            message = "El equipo '${team.name}' se ha unido a tu partido '${match.name}'."
+                        )
+                    }
+                }
+            }
             _joinResult.postValue(result)
             loadMatchById(matchId)
             _loading.value = false

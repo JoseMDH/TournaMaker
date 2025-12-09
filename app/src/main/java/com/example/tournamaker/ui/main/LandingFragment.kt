@@ -17,6 +17,7 @@ import com.example.tournamaker.databinding.FragmentLandingBinding
 import com.example.tournamaker.utils.AuthManager
 import com.example.tournamaker.utils.showToast
 import com.example.tournamaker.viewModel.MatchViewModel
+import com.example.tournamaker.viewModel.MatchViewModelFactory
 import com.example.tournamaker.viewModel.NotificationViewModel
 import com.example.tournamaker.viewModel.NotificationViewModelFactory
 import com.example.tournamaker.viewModel.TeamViewModel
@@ -30,7 +31,6 @@ class LandingFragment : Fragment() {
     private var _binding: FragmentLandingBinding? = null
     private val binding get() = _binding!!
 
-    private val matchViewModel: MatchViewModel by viewModels()
     private val userViewModel: UserViewModel by viewModels()
     private val notificationViewModel: NotificationViewModel by viewModels { 
         NotificationViewModelFactory(AuthManager.getInstance(requireContext())) 
@@ -40,6 +40,9 @@ class LandingFragment : Fragment() {
     }
     private val tournamentViewModel: TournamentViewModel by viewModels { 
         TournamentViewModelFactory(notificationViewModel) 
+    }
+    private val matchViewModel: MatchViewModel by viewModels { 
+        MatchViewModelFactory(notificationViewModel) 
     }
 
     private lateinit var tournamentAdapter: TournamentAdapter

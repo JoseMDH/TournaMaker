@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
 import com.example.tournamaker.R
 import com.example.tournamaker.data.model.Match
 import com.example.tournamaker.data.model.Team
@@ -19,6 +18,9 @@ import com.example.tournamaker.utils.loadImage
 import com.example.tournamaker.utils.show
 import com.example.tournamaker.utils.showToast
 import com.example.tournamaker.viewModel.MatchViewModel
+import com.example.tournamaker.viewModel.MatchViewModelFactory
+import com.example.tournamaker.viewModel.NotificationViewModel
+import com.example.tournamaker.viewModel.NotificationViewModelFactory
 import com.example.tournamaker.viewModel.UserViewModel
 
 class MatchViewFragment : Fragment() {
@@ -26,9 +28,13 @@ class MatchViewFragment : Fragment() {
     private var _binding: FragmentMatchViewBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MatchViewModel by viewModels()
     private val userViewModel: UserViewModel by viewModels()
-    private val args: MatchViewFragmentArgs by navArgs()
+    private val notificationViewModel: NotificationViewModel by viewModels { 
+        NotificationViewModelFactory(AuthManager.getInstance(requireContext())) 
+    }
+    private val viewModel: MatchViewModel by viewModels { 
+        MatchViewModelFactory(notificationViewModel) 
+    }
     private lateinit var authManager: AuthManager
 
     override fun onCreateView(
@@ -173,7 +179,9 @@ class MatchViewFragment : Fragment() {
     }
 
     private fun loadData() {
-        viewModel.loadMatchById(args.matchId)
+        arguments?.getString("matchId")?.let { matchId ->
+            viewModel.loadMatchById(matchId)
+        }
         val currentUser = authManager.getUser()
         if (currentUser != null) {
             userViewModel.loadUserProfile(currentUser.id, currentUser.username)

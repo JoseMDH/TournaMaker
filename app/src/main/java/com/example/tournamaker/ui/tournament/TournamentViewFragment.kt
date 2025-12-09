@@ -22,6 +22,7 @@ import com.example.tournamaker.utils.loadImage
 import com.example.tournamaker.utils.show
 import com.example.tournamaker.utils.showToast
 import com.example.tournamaker.viewModel.MatchViewModel
+import com.example.tournamaker.viewModel.MatchViewModelFactory
 import com.example.tournamaker.viewModel.NotificationViewModel
 import com.example.tournamaker.viewModel.NotificationViewModelFactory
 import com.example.tournamaker.viewModel.TeamViewModel
@@ -36,7 +37,6 @@ class TournamentViewFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val userViewModel: UserViewModel by viewModels()
-    private val matchViewModel: MatchViewModel by viewModels()
     private val notificationViewModel: NotificationViewModel by viewModels { 
         NotificationViewModelFactory(AuthManager.getInstance(requireContext())) 
     }
@@ -45,6 +45,9 @@ class TournamentViewFragment : Fragment() {
     }
     private val tournamentViewModel: TournamentViewModel by viewModels { 
         TournamentViewModelFactory(notificationViewModel) 
+    }
+    private val matchViewModel: MatchViewModel by viewModels { 
+        MatchViewModelFactory(notificationViewModel) 
     }
     private lateinit var authManager: AuthManager
 
