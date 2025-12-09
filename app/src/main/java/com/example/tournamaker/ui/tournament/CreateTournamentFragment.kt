@@ -4,23 +4,33 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.tournamaker.R
 import com.example.tournamaker.data.model.Tournament
 import com.example.tournamaker.databinding.FragmentCreateTournamentBinding
 import com.example.tournamaker.utils.AuthManager
 import com.example.tournamaker.utils.hide
 import com.example.tournamaker.utils.show
 import com.example.tournamaker.utils.showToast
+import com.example.tournamaker.viewModel.NotificationViewModel
+import com.example.tournamaker.viewModel.NotificationViewModelFactory
 import com.example.tournamaker.viewModel.TournamentViewModel
+import com.example.tournamaker.viewModel.TournamentViewModelFactory
 
 class CreateTournamentFragment : Fragment() {
 
     private var _binding: FragmentCreateTournamentBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: TournamentViewModel by viewModels()
+    private val notificationViewModel: NotificationViewModel by viewModels { 
+        NotificationViewModelFactory(AuthManager.getInstance(requireContext())) 
+    }
+    private val viewModel: TournamentViewModel by viewModels { 
+        TournamentViewModelFactory(notificationViewModel) 
+    }
     private lateinit var authManager: AuthManager
 
     override fun onCreateView(
@@ -49,8 +59,8 @@ class CreateTournamentFragment : Fragment() {
             result.fold(
                 onSuccess = { newTournament ->
                     showToast("Torneo creado con éxito")
-                    val action = CreateTournamentFragmentDirections.actionCreateTournamentFragmentToTournamentView(newTournament.id)
-                    findNavController().navigate(action)
+                    val bundle = bundleOf("tournamentId" to newTournament.id)
+                    findNavController().navigate(R.id.action_createTournamentFragment_to_tournamentView, bundle)
                 },
                 onFailure = { error ->
                     showToast(error.message ?: "Error al crear el torneo")

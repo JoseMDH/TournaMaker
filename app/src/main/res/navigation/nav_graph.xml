@@ -119,6 +119,10 @@
         <action
             android:id="@+id/action_tournamentViewFragment_to_matchViewFragment"
             app:destination="@id/matchViewFragment" />
+
+        <action
+            android:id="@+id/action_tournamentViewFragment_to_teamViewFragment"
+            app:destination="@id/teamViewFragment" />
     </fragment>
 
     <fragment

@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tournamaker.R
@@ -22,8 +22,12 @@ import com.example.tournamaker.utils.loadImage
 import com.example.tournamaker.utils.show
 import com.example.tournamaker.utils.showToast
 import com.example.tournamaker.viewModel.MatchViewModel
+import com.example.tournamaker.viewModel.NotificationViewModel
+import com.example.tournamaker.viewModel.NotificationViewModelFactory
 import com.example.tournamaker.viewModel.TeamViewModel
+import com.example.tournamaker.viewModel.TeamViewModelFactory
 import com.example.tournamaker.viewModel.TournamentViewModel
+import com.example.tournamaker.viewModel.TournamentViewModelFactory
 import com.example.tournamaker.viewModel.UserViewModel
 
 class TournamentViewFragment : Fragment() {
@@ -31,11 +35,17 @@ class TournamentViewFragment : Fragment() {
     private var _binding: FragmentTournamentViewBinding? = null
     private val binding get() = _binding!!
 
-    private val tournamentViewModel: TournamentViewModel by viewModels()
     private val userViewModel: UserViewModel by viewModels()
     private val matchViewModel: MatchViewModel by viewModels()
-    private val teamViewModel: TeamViewModel by viewModels()
-    private val args: TournamentViewFragmentArgs by navArgs()
+    private val notificationViewModel: NotificationViewModel by viewModels { 
+        NotificationViewModelFactory(AuthManager.getInstance(requireContext())) 
+    }
+    private val teamViewModel: TeamViewModel by viewModels { 
+        TeamViewModelFactory(notificationViewModel) 
+    }
+    private val tournamentViewModel: TournamentViewModel by viewModels { 
+        TournamentViewModelFactory(notificationViewModel) 
+    }
     private lateinit var authManager: AuthManager
 
     private lateinit var teamAdapter: TeamAdapter
@@ -58,8 +68,10 @@ class TournamentViewFragment : Fragment() {
     }
 
     private fun setupRecyclerViews() {
-        teamAdapter = TeamAdapter(emptyList(), null) { team, _ ->
-            // Navigate to team view
+        val user = authManager.getUser()
+        teamAdapter = TeamAdapter(emptyList(), user?.username) { team, _ ->
+            val bundle = bundleOf("teamId" to team.id)
+            findNavController().navigate(R.id.action_tournamentViewFragment_to_teamViewFragment, bundle)
         }
         binding.rvTeams.apply {
             layoutManager = GridLayoutManager(context, 4)
@@ -67,8 +79,8 @@ class TournamentViewFragment : Fragment() {
         }
 
         bracketAdapter = BracketAdapter(emptyList()) { match ->
-            val action = TournamentViewFragmentDirections.actionTournamentViewFragmentToMatchViewFragment(match.id)
-            findNavController().navigate(action)
+            val bundle = bundleOf("matchId" to match.id)
+            findNavController().navigate(R.id.action_tournamentViewFragment_to_matchViewFragment, bundle)
         }
         binding.rvBracket.apply {
             layoutManager = LinearLayoutManager(context)
@@ -136,7 +148,9 @@ class TournamentViewFragment : Fragment() {
     }
 
     private fun loadData() {
-        tournamentViewModel.loadTournamentById(args.tournamentId)
+        arguments?.getString("tournamentId")?.let { tournamentId ->
+            tournamentViewModel.loadTournamentById(tournamentId)
+        }
         val currentUser = authManager.getUser()
         if (currentUser != null) {
             userViewModel.loadUserProfile(currentUser.id, currentUser.username)

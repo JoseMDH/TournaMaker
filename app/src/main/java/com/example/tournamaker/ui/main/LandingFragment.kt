@@ -22,6 +22,7 @@ import com.example.tournamaker.viewModel.NotificationViewModelFactory
 import com.example.tournamaker.viewModel.TeamViewModel
 import com.example.tournamaker.viewModel.TeamViewModelFactory
 import com.example.tournamaker.viewModel.TournamentViewModel
+import com.example.tournamaker.viewModel.TournamentViewModelFactory
 import com.example.tournamaker.viewModel.UserViewModel
 
 class LandingFragment : Fragment() {
@@ -29,7 +30,6 @@ class LandingFragment : Fragment() {
     private var _binding: FragmentLandingBinding? = null
     private val binding get() = _binding!!
 
-    private val tournamentViewModel: TournamentViewModel by viewModels()
     private val matchViewModel: MatchViewModel by viewModels()
     private val userViewModel: UserViewModel by viewModels()
     private val notificationViewModel: NotificationViewModel by viewModels { 
@@ -37,6 +37,9 @@ class LandingFragment : Fragment() {
     }
     private val teamViewModel: TeamViewModel by viewModels { 
         TeamViewModelFactory(notificationViewModel) 
+    }
+    private val tournamentViewModel: TournamentViewModel by viewModels { 
+        TournamentViewModelFactory(notificationViewModel) 
     }
 
     private lateinit var tournamentAdapter: TournamentAdapter

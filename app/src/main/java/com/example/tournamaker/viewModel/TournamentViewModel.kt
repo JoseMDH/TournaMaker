@@ -9,9 +9,12 @@ import com.example.tournamaker.data.repository.TeamRepository
 import com.example.tournamaker.data.repository.TournamentRepository
 import kotlinx.coroutines.launch
 
-class TournamentViewModel : ViewModel() {
+class TournamentViewModel(
+    private val notificationViewModel: NotificationViewModel
+) : ViewModel() {
 
-    private val tournamentRepository = TournamentRepository(TeamRepository())
+    private val teamRepository = TeamRepository()
+    private val tournamentRepository = TournamentRepository(teamRepository)
 
     private val _tournaments = MutableLiveData<List<Tournament>>()
     val tournaments: LiveData<List<Tournament>> = _tournaments
@@ -65,6 +68,16 @@ class TournamentViewModel : ViewModel() {
         viewModelScope.launch {
             _loading.value = true
             val result = tournamentRepository.joinTournament(tournamentId, teamId)
+            if (result.isSuccess) {
+                val tournament = tournamentRepository.getTournamentById(tournamentId)
+                val team = teamRepository.getTeamById(teamId)
+                if (tournament != null && team != null) {
+                    notificationViewModel.createNotification(
+                        userId = tournament.creatorId,
+                        message = "El equipo '${team.name}' se ha unido a tu torneo '${tournament.name}'."
+                    )
+                }
+            }
             _joinResult.postValue(result)
             loadTournamentById(tournamentId)
             _loading.value = false
