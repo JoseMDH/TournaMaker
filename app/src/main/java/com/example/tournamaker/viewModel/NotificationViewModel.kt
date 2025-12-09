@@ -3,36 +3,31 @@ package com.example.tournamaker.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.tournamaker.data.model.Notification
 import com.example.tournamaker.data.repository.NotificationRepository
 import com.example.tournamaker.utils.AuthManager
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 
 class NotificationViewModel(private val authManager: AuthManager) : ViewModel() {
 
     private val notificationRepository = NotificationRepository()
+    private val userId = authManager.getUser()?.id
 
     private val _notifications = MutableLiveData<List<Notification>>()
     val notifications: LiveData<List<Notification>> = _notifications
 
-    private val _unreadCount = MutableLiveData<Int>()
-    val unreadCount: LiveData<Int> = _unreadCount
+    val unreadCount: LiveData<Int> = if (userId != null) {
+        notificationRepository.getUnreadNotificationCount(userId).asLiveData()
+    } else {
+        MutableLiveData(0)
+    }
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
-
-    fun loadNotifications() {
-        viewModelScope.launch {
-            _loading.postValue(true)
-            val userId = authManager.getUser()?.id
-            if (userId != null) {
-                val userNotifications = notificationRepository.getNotificationsForUser(userId)
-                _notifications.postValue(userNotifications)
-            }
-            _loading.postValue(false)
-        }
-    }
 
     fun createNotification(userId: String, message: String) {
         viewModelScope.launch {
@@ -41,22 +36,25 @@ class NotificationViewModel(private val authManager: AuthManager) : ViewModel() 
         }
     }
 
-    fun fetchUnreadNotificationCount() {
+    fun loadNotifications() {
         viewModelScope.launch {
-            val userId = authManager.getUser()?.id
+            _loading.postValue(true)
             if (userId != null) {
-                val count = notificationRepository.countUnreadNotifications(userId)
-                _unreadCount.postValue(count)
+                notificationRepository.getNotifications(userId).collect {
+                    _notifications.postValue(it)
+                    _loading.postValue(false)
+                }
+            } else {
+                _notifications.postValue(emptyList())
+                _loading.postValue(false)
             }
         }
     }
 
     fun markAllNotificationsAsRead() {
         viewModelScope.launch {
-            val userId = authManager.getUser()?.id
-            if (userId != null) {
-                notificationRepository.markAllAsRead(userId)
-                _unreadCount.postValue(0)
+            userId?.let {
+                notificationRepository.markAllNotificationsAsRead(it)
             }
         }
     }

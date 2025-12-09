@@ -17,12 +17,15 @@ import com.example.tournamaker.utils.AuthManager
 import com.example.tournamaker.viewModel.NotificationViewModel
 import com.example.tournamaker.viewModel.NotificationViewModelFactory
 import com.google.android.material.badge.BadgeDrawable
+import com.google.android.material.badge.BadgeUtils
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var authManager: AuthManager
     private lateinit var appBarConfiguration: AppBarConfiguration
+
+    private var notificationBadge: BadgeDrawable? = null
 
     private val notificationViewModel: NotificationViewModel by viewModels {
         NotificationViewModelFactory(AuthManager.getInstance(this))
@@ -38,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
         setupNavigationAndUi()
         setupFab()
-        setupNotificationBadge()
+        observeNotifications()
     }
 
     private fun setupNavigationAndUi() {
@@ -87,19 +90,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupNotificationBadge() {
-        notificationViewModel.fetchUnreadNotificationCount()
-        notificationViewModel.unreadCount.observe(this) { count ->
-            val notificationsMenuItem = binding.toolbar.menu.findItem(R.id.notificationsFragment)
-            if (notificationsMenuItem != null) {
-                if (count > 0) {
-                    val badge = BadgeDrawable.create(this)
-                    badge.number = count
-                    notificationsMenuItem.icon = badge
-                } else {
-                    notificationsMenuItem.icon = getDrawable(R.drawable.ic_notifications)
-                }
-            }
+    private fun observeNotifications() {
+        notificationViewModel.unreadCount.observe(this) { 
+            invalidateOptionsMenu() 
         }
     }
 
@@ -111,7 +104,21 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
-        setupNotificationBadge() // Re-setup badge on menu creation
+        val menuItem = menu.findItem(R.id.notificationsFragment)
+        val unreadCount = notificationViewModel.unreadCount.value ?: 0
+
+        if (unreadCount > 0) {
+            if (notificationBadge == null) {
+                notificationBadge = BadgeDrawable.create(this)
+            }
+            notificationBadge!!.number = unreadCount
+            BadgeUtils.attachBadgeDrawable(notificationBadge!!, binding.toolbar, menuItem.itemId)
+        } else {
+            if (notificationBadge != null) {
+                BadgeUtils.detachBadgeDrawable(notificationBadge!!, binding.toolbar, menuItem.itemId)
+                notificationBadge = null
+            }
+        }
         return true
     }
 

@@ -20,8 +20,8 @@ class NotificationsFragment : Fragment() {
     private var _binding: FragmentNotificationsBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: NotificationViewModel by viewModels { 
-        NotificationViewModelFactory(AuthManager.getInstance(requireContext())) 
+    private val viewModel: NotificationViewModel by viewModels {
+        NotificationViewModelFactory(AuthManager.getInstance(requireContext()))
     }
     private lateinit var notificationAdapter: GeneralNotificationAdapter
 
