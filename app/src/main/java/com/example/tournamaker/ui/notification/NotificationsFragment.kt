@@ -9,16 +9,20 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tournamaker.adapter.GeneralNotificationAdapter
 import com.example.tournamaker.databinding.FragmentNotificationsBinding
+import com.example.tournamaker.utils.AuthManager
 import com.example.tournamaker.utils.hide
 import com.example.tournamaker.utils.show
 import com.example.tournamaker.viewModel.NotificationViewModel
+import com.example.tournamaker.viewModel.NotificationViewModelFactory
 
 class NotificationsFragment : Fragment() {
 
     private var _binding: FragmentNotificationsBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: NotificationViewModel by viewModels()
+    private val viewModel: NotificationViewModel by viewModels { 
+        NotificationViewModelFactory(AuthManager.getInstance(requireContext())) 
+    }
     private lateinit var notificationAdapter: GeneralNotificationAdapter
 
     override fun onCreateView(

@@ -7,27 +7,30 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
-import com.example.tournamaker.data.model.JoinRequest
-import com.example.tournamaker.data.model.RequestType
+import com.example.tournamaker.R
 import com.example.tournamaker.databinding.FragmentTeamViewBinding
 import com.example.tournamaker.utils.AuthManager
 import com.example.tournamaker.utils.hide
 import com.example.tournamaker.utils.loadImage
 import com.example.tournamaker.utils.show
 import com.example.tournamaker.utils.showToast
-import com.example.tournamaker.viewModel.JoinRequestViewModel
+import com.example.tournamaker.viewModel.NotificationViewModel
+import com.example.tournamaker.viewModel.NotificationViewModelFactory
 import com.example.tournamaker.viewModel.TeamViewModel
+import com.example.tournamaker.viewModel.TeamViewModelFactory
 
 class TeamViewFragment : Fragment() {
 
     private var _binding: FragmentTeamViewBinding? = null
     private val binding get() = _binding!!
 
-    private val teamViewModel: TeamViewModel by viewModels()
-    private val joinRequestViewModel: JoinRequestViewModel by viewModels()
-    private val args: TeamViewFragmentArgs by navArgs()
+    private val notificationViewModel: NotificationViewModel by viewModels { 
+        NotificationViewModelFactory(AuthManager.getInstance(requireContext())) 
+    }
+    private val teamViewModel: TeamViewModel by viewModels { 
+        TeamViewModelFactory(notificationViewModel) 
+    }
     private lateinit var authManager: AuthManager
 
     override fun onCreateView(
@@ -58,16 +61,9 @@ class TeamViewFragment : Fragment() {
                 val currentUser = authManager.getUser()
                 if (currentUser != null && currentUser.id != team.creatorId && !team.participants.contains(currentUser.username)) {
                     binding.btnJoinRequest.show()
+                    binding.btnJoinRequest.text = getString(R.string.request_to_join)
                     binding.btnJoinRequest.setOnClickListener {
-                        val request = JoinRequest(
-                            type = RequestType.TEAM_JOIN,
-                            requesterId = currentUser.id,
-                            requesterName = currentUser.username,
-                            targetId = team.id,
-                            targetName = team.name,
-                            ownerId = team.creatorId
-                        )
-                        joinRequestViewModel.createJoinRequest(request)
+                        teamViewModel.joinTeam(team.id, currentUser.id, currentUser.username)
                     }
                 } else {
                     binding.btnJoinRequest.hide()
@@ -79,16 +75,21 @@ class TeamViewFragment : Fragment() {
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
 
-        joinRequestViewModel.requestResult.observe(viewLifecycleOwner) { result ->
+        teamViewModel.joinResult.observe(viewLifecycleOwner) { result ->
             result.fold(
-                onSuccess = { showToast("Solicitud enviada correctamente") },
-                onFailure = { error -> showToast("Error al enviar la solicitud: ${error.message}") }
+                onSuccess = {
+                    showToast(getString(R.string.team_joined_successfully))
+                    loadData() // Recargar datos para ocultar el botón
+                },
+                onFailure = { error -> showToast("${getString(R.string.error_joining_team)}: ${error.message}") }
             )
         }
     }
 
     private fun loadData() {
-        teamViewModel.loadTeamById(args.teamId)
+        arguments?.getString("teamId")?.let { teamId ->
+            teamViewModel.loadTeamById(teamId)
+        }
     }
 
     override fun onDestroyView() {

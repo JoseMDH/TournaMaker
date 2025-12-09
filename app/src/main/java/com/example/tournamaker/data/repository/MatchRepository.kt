@@ -60,6 +60,19 @@ class MatchRepository(
         }
     }
 
+    suspend fun getMatchesByParticipant(teamId: String): List<Match> {
+        return try {
+            val query1 = matchesCollection.whereEqualTo("team1Id", teamId).get().await()
+            val query2 = matchesCollection.whereEqualTo("team2Id", teamId).get().await()
+            val matches = mutableListOf<Match>()
+            query1.documents.mapNotNull { it.toObject<Match>()?.copy(id = it.id) }.let { matches.addAll(it) }
+            query2.documents.mapNotNull { it.toObject<Match>()?.copy(id = it.id) }.let { matches.addAll(it) }
+            matches.distinctBy { it.id }
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
     suspend fun getMatchesByTournamentIds(tournamentIds: List<String>): List<Match> {
         if (tournamentIds.isEmpty()) {
             return emptyList()

@@ -102,7 +102,7 @@ class MatchViewFragment : Fragment() {
             "PENDING" -> {
                 binding.btnStartMatch.visibility = if (isCreator && match.team1Id != null && match.team2Id != null) View.VISIBLE else View.GONE
                 binding.btnFinishMatch.hide()
-                binding.btnJoinMatch.visibility = if (!isCreator && (match.team1Id == null || match.team2Id == null)) View.VISIBLE else View.GONE
+                binding.btnJoinMatch.visibility = if (match.team1Id == null || match.team2Id == null) View.VISIBLE else View.GONE
             }
             "IN_PROGRESS" -> {
                 binding.btnStartMatch.hide()

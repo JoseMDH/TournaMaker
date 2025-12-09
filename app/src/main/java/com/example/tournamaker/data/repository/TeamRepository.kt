@@ -80,9 +80,9 @@ class TeamRepository {
         }
     }
 
-    suspend fun requestToJoinTeam(teamId: String, userId: String): Result<Unit> {
+    suspend fun joinTeam(teamId: String, username: String): Result<Unit> {
         return try {
-            teamsCollection.document(teamId).update("requestedUsers", FieldValue.arrayUnion(userId)).await()
+            teamsCollection.document(teamId).update("participants", FieldValue.arrayUnion(username)).await()
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)

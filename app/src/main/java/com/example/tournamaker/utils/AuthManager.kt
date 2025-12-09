@@ -24,6 +24,13 @@ class AuthManager private constructor(context: Context) {
         }
     }
 
+    fun setTeamId(teamId: String) {
+        val user = getUser()
+        if (user != null) {
+            saveUser(user.copy(teamId = teamId))
+        }
+    }
+
     fun isLoggedIn(): Boolean {
         return getUser() != null
     }

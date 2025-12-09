@@ -6,14 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tournamaker.data.model.Notification
 import com.example.tournamaker.data.repository.NotificationRepository
-import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.flow.collect
+import com.example.tournamaker.utils.AuthManager
 import kotlinx.coroutines.launch
 
-class NotificationViewModel : ViewModel() {
+class NotificationViewModel(private val authManager: AuthManager) : ViewModel() {
 
     private val notificationRepository = NotificationRepository()
-    private val firebaseAuth = FirebaseAuth.getInstance()
 
     private val _notifications = MutableLiveData<List<Notification>>()
     val notifications: LiveData<List<Notification>> = _notifications
@@ -24,15 +22,19 @@ class NotificationViewModel : ViewModel() {
     fun loadNotifications() {
         viewModelScope.launch {
             _loading.postValue(true)
-            val userId = firebaseAuth.currentUser?.uid
+            val userId = authManager.getUser()?.id
             if (userId != null) {
-                notificationRepository.getNotifications(userId).collect {
-                    _notifications.postValue(it)
-                    _loading.postValue(false)
-                }
-            } else {
-                _loading.postValue(false)
+                val userNotifications = notificationRepository.getNotificationsForUser(userId)
+                _notifications.postValue(userNotifications)
             }
+            _loading.postValue(false)
+        }
+    }
+
+    fun createNotification(userId: String, message: String) {
+        viewModelScope.launch {
+            val notification = Notification(userId = userId, message = message)
+            notificationRepository.createNotification(notification)
         }
     }
 }

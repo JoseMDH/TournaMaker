@@ -5,9 +5,9 @@ import java.util.Date
 
 data class Notification(
     val id: String = "",
-    val userId: String = "",
+    val userId: String = "", // ID del usuario que recibe la notificación
     val message: String = "",
     @ServerTimestamp
     val timestamp: Date? = null,
-    val read: Boolean = false
+    val isRead: Boolean = false
 )

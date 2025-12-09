@@ -52,6 +52,8 @@
     <string name="show_requests">Mostrar Solicitudes</string>
     <string name="joined_successfully">Te has unido al torneo</string>
     <string name="error_joining">Error al unirse al torneo</string>
+    <string name="team_joined_successfully">Te has unido al equipo correctamente</string>
+    <string name="error_joining_team">Error al unirse al equipo</string>
 
     <!-- Accessibility & Actions -->
     <string name="action_profile">Perfil de usuario</string>

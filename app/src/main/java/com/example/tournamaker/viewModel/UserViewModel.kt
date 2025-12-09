@@ -41,14 +41,26 @@ class UserViewModel : ViewModel() {
             _loading.value = true
             try {
                 val userProfile = userRepository.getById(userId)
-                val tournaments = tournamentRepository.getTournamentsByCreator(userId)
+
+                // Tournaments
+                val createdTournaments = tournamentRepository.getTournamentsByCreator(userId)
                 val teams = teamRepository.getTeamsByParticipant(username)
-                val matches = matchRepository.getMatchesByCreator(userId)
+                val participatedTournaments = teams.flatMap { team ->
+                    tournamentRepository.getTournamentsByParticipant(team.id)
+                }
+                val allTournaments = (createdTournaments + participatedTournaments).distinctBy { it.id }
+
+                // Matches
+                val createdMatches = matchRepository.getMatchesByCreator(userId)
+                val participatedMatches = teams.flatMap { team ->
+                    matchRepository.getMatchesByParticipant(team.id)
+                }
+                val allMatches = (createdMatches + participatedMatches).distinctBy { it.id }
 
                 _user.postValue(userProfile)
-                _userTournaments.postValue(tournaments)
+                _userTournaments.postValue(allTournaments)
                 _userTeams.postValue(teams)
-                _userMatches.postValue(matches)
+                _userMatches.postValue(allMatches)
 
             } catch (e: Exception) {
                 _user.postValue(null)

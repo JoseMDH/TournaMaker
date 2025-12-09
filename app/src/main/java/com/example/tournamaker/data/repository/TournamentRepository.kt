@@ -82,6 +82,16 @@ class TournamentRepository(
         }
     }
 
+    suspend fun getTournamentsByParticipant(teamId: String): List<Tournament> {
+        return try {
+            tournamentsCollection.whereArrayContains("teams", teamId).get().await().documents.mapNotNull {
+                it.toObject<Tournament>()?.copy(id = it.id)
+            }
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
     suspend fun joinTournament(tournamentId: String, teamId: String): Result<Unit> {
         return try {
             val tournament = getTournamentById(tournamentId)

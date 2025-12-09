@@ -8,7 +8,9 @@ import com.example.tournamaker.data.model.Team
 import com.example.tournamaker.data.repository.TeamRepository
 import kotlinx.coroutines.launch
 
-class TeamViewModel : ViewModel() {
+class TeamViewModel(
+    private val notificationViewModel: NotificationViewModel
+) : ViewModel() {
 
     private val teamRepository = TeamRepository()
 
@@ -21,8 +23,8 @@ class TeamViewModel : ViewModel() {
     private val _creationResult = MutableLiveData<Result<Team>>()
     val creationResult: LiveData<Result<Team>> = _creationResult
 
-    private val _requestJoinResult = MutableLiveData<Result<Unit>>()
-    val requestJoinResult: LiveData<Result<Unit>> = _requestJoinResult
+    private val _joinResult = MutableLiveData<Result<Unit>>()
+    val joinResult: LiveData<Result<Unit>> = _joinResult
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
@@ -72,11 +74,20 @@ class TeamViewModel : ViewModel() {
         }
     }
 
-    fun requestToJoinTeam(teamId: String, userId: String) {
+    fun joinTeam(teamId: String, userId: String, username: String) {
         viewModelScope.launch {
             _loading.value = true
-            val result = teamRepository.requestToJoinTeam(teamId, userId)
-            _requestJoinResult.postValue(result)
+            val result = teamRepository.joinTeam(teamId, username)
+            if (result.isSuccess) {
+                val team = teamRepository.getTeamById(teamId)
+                if (team != null) {
+                    notificationViewModel.createNotification(
+                        userId = team.creatorId,
+                        message = "$username se ha unido a tu equipo ${team.name}"
+                    )
+                }
+            }
+            _joinResult.postValue(result)
             _loading.value = false
         }
     }

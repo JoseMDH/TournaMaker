@@ -90,8 +90,7 @@ class TournamentViewFragment : Fragment() {
 
                 userViewModel.userTeams.observe(viewLifecycleOwner) { userTeams ->
                     val eligibleTeams = userTeams.filter { !tournament.teams.contains(it.id) }
-                    val isCreator = authManager.getUser()?.id == tournament.creatorId
-                    if (eligibleTeams.isNotEmpty() && tournament.status == "open" && !isCreator) {
+                    if (eligibleTeams.isNotEmpty() && tournament.status == "open") {
                         binding.btnJoinRequest.show()
                         binding.btnJoinRequest.setOnClickListener {
                             showTeamSelectionDialog(eligibleTeams, tournament)

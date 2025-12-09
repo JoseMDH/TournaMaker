@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -42,14 +43,15 @@ class MyTeamsFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        teamAdapter = TeamAdapter(emptyList(), authManager.getUser()?.teamId) { team, action ->
+        val user = authManager.getUser()
+        teamAdapter = TeamAdapter(emptyList(), user?.username, true) { team, action ->
             if (action == "view") {
-                val navAction = MyTeamsFragmentDirections.actionMyTeamsFragmentToTeamViewFragment(team.id)
-                findNavController().navigate(navAction)
+                val bundle = bundleOf("teamId" to team.id)
+                findNavController().navigate(R.id.action_myTeamsFragment_to_teamViewFragment, bundle)
             }
         }
         binding.rvMyTeams.apply {
-            layoutManager = GridLayoutManager(requireContext(), 2)
+            layoutManager = GridLayoutManager(requireContext(), 3)
             adapter = teamAdapter
         }
     }
@@ -63,6 +65,10 @@ class MyTeamsFragment : Fragment() {
                 binding.tvNoTeams.hide()
                 binding.rvMyTeams.show()
                 teamAdapter.updateTeams(teams)
+                // Actualizar el teamId en AuthManager con el primer equipo de la lista
+                if (teams.isNotEmpty()) {
+                    authManager.setTeamId(teams[0].id)
+                }
             }
         }
     }

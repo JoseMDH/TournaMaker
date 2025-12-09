@@ -11,7 +11,8 @@ import com.example.tournamaker.utils.show
 
 class TeamAdapter(
     private var teams: List<Team>,
-    private val currentUserTeamId: String?,
+    private val currentUsername: String?,
+    private val isMyTeamsScreen: Boolean = false,
     private val onTeamInteraction: (Team, String) -> Unit
 ) : RecyclerView.Adapter<TeamAdapter.TeamViewHolder>() {
 
@@ -23,9 +24,6 @@ class TeamAdapter(
     override fun onBindViewHolder(holder: TeamViewHolder, position: Int) {
         val team = teams[position]
         holder.bind(team)
-        holder.itemView.setOnClickListener {
-            onTeamInteraction(team, "view")
-        }
     }
 
     override fun getItemCount(): Int = teams.size
@@ -42,10 +40,16 @@ class TeamAdapter(
             binding.tvTeamName.text = team.name
             binding.ivTeamImage.loadImage(team.image)
 
-            if (currentUserTeamId.isNullOrEmpty() && !team.requestedUsers.contains(currentUserTeamId)) {
-                binding.btnJoinTeam.show()
-            } else {
+            val userIsParticipant = currentUsername?.let { team.participants.contains(it) } ?: false
+
+            if (isMyTeamsScreen || userIsParticipant) {
                 binding.btnJoinTeam.hide()
+            } else {
+                binding.btnJoinTeam.show()
+            }
+
+            itemView.setOnClickListener {
+                onTeamInteraction(team, "view")
             }
 
             binding.btnJoinTeam.setOnClickListener {
